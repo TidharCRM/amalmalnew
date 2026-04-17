@@ -1633,6 +1633,11 @@ mark.highlight::after {
   }
 }
 
+@media (max-width: 768px) {
+  .hero { height: 100dvh; }
+  .hero__sticky { position: relative; height: 100dvh; }
+}
+
 /* ═══════════════════════════════════════════════════════
    HERO SCROLL PROGRESS BAR (Pattern 10 — progress indicator)
    ═══════════════════════════════════════════════════════ */
