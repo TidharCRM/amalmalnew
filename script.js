@@ -1,6 +1,9 @@
 (function () {
   'use strict';
 
+  // Firebase Realtime Database reference (populated after Firebase CDN loads)
+  var db = (typeof firebase !== 'undefined') ? firebase.database() : null;
+
   // ═══════════════════════════════════════════════════════
   // HERO — Canvas Scroll-Frame Animation
   // ═══════════════════════════════════════════════════════
@@ -482,10 +485,11 @@
       if (pinInput.value === CORRECT_PIN) {
         pinScreen.style.display = 'none';
         adminPanel.style.display = 'block';
-        try {
-          var saved = localStorage.getItem('courseDate');
-          if (saved) dateInput.value = saved;
-        } catch (err) {}
+        if (db) {
+          db.ref('/countdownDate').once('value').then(function (snap) {
+            if (snap.val()) dateInput.value = snap.val();
+          });
+        }
       } else {
         if (pinError) pinError.style.display = 'block';
         pinInput.value = '';
@@ -496,16 +500,19 @@
     saveBtn.addEventListener('click', function () {
       var date = dateInput.value;
       if (!date) return;
-      try { localStorage.setItem('courseDate', date); } catch (err) {}
-      initCountdown();
-      closeModal();
+      if (db) {
+        db.ref('/countdownDate').set(date).then(closeModal).catch(closeModal);
+      } else {
+        closeModal();
+      }
     });
 
     clearBtn.addEventListener('click', function () {
-      try { localStorage.removeItem('courseDate'); } catch (err) {}
-      var section = document.getElementById('countdown');
-      if (section) section.style.display = 'none';
-      closeModal();
+      if (db) {
+        db.ref('/countdownDate').set(null).then(closeModal).catch(closeModal);
+      } else {
+        closeModal();
+      }
     });
   }
 
@@ -517,60 +524,47 @@
     var section = document.getElementById('countdown');
     if (!section) return;
 
-    var courseDate;
-    try { courseDate = localStorage.getItem('courseDate'); } catch (err) {}
-
-    if (!courseDate) {
-      section.style.display = 'none';
-      return;
-    }
-
-    var target = new Date(courseDate);
-    var now = new Date();
-
-    section.style.display = 'block';
-
-    if (target <= now) {
-      var display = document.getElementById('countdown-display');
-      if (display) {
-        display.innerHTML = '<span class="countdown__live">הקורס כבר התחיל — הצטרפי עכשיו!</span>';
-      }
-      return;
-    }
-
     var intervalId = null;
 
-    function tick() {
-      var now = new Date();
-      var diff = target - now;
+    function startTimer(courseDate) {
+      if (intervalId) { clearInterval(intervalId); intervalId = null; }
 
-      if (diff <= 0) {
-        var display = document.getElementById('countdown-display');
-        if (display) {
-          display.innerHTML = '<span class="countdown__live">הקורס כבר התחיל — הצטרפי עכשיו!</span>';
+      if (!courseDate) { section.style.display = 'none'; return; }
+
+      var target = new Date(courseDate);
+      section.style.display = 'block';
+
+      var display = document.getElementById('countdown-display');
+
+      function tick() {
+        var diff = target - new Date();
+        if (diff <= 0) {
+          if (display) display.innerHTML = '<span class="countdown__live">הקורס כבר התחיל — הצטרפי עכשיו!</span>';
+          clearInterval(intervalId);
+          return;
         }
-        clearInterval(intervalId);
-        return;
+        var dEl = document.getElementById('cd-days');
+        var hEl = document.getElementById('cd-hours');
+        var mEl = document.getElementById('cd-minutes');
+        var sEl = document.getElementById('cd-seconds');
+        if (dEl) dEl.textContent = String(Math.floor(diff / 86400000)).padStart(2, '0');
+        if (hEl) hEl.textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+        if (mEl) mEl.textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+        if (sEl) sEl.textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
       }
 
-      var days    = Math.floor(diff / (1000 * 60 * 60 * 24));
-      var hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      var dEl = document.getElementById('cd-days');
-      var hEl = document.getElementById('cd-hours');
-      var mEl = document.getElementById('cd-minutes');
-      var sEl = document.getElementById('cd-seconds');
-
-      if (dEl) dEl.textContent = String(days).padStart(2, '0');
-      if (hEl) hEl.textContent = String(hours).padStart(2, '0');
-      if (mEl) mEl.textContent = String(minutes).padStart(2, '0');
-      if (sEl) sEl.textContent = String(seconds).padStart(2, '0');
+      tick();
+      intervalId = setInterval(tick, 1000);
     }
 
-    tick();
-    intervalId = setInterval(tick, 1000);
+    if (db) {
+      // Real-time sync: all devices see the same countdown instantly
+      db.ref('/countdownDate').on('value', function (snap) {
+        startTimer(snap.val());
+      });
+    } else {
+      section.style.display = 'none';
+    }
   }
 
   // ═══════════════════════════════════════════════════════
