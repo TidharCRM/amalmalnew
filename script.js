@@ -669,45 +669,42 @@
 
   function initStickyCards() {
     var navH = 72;
-    var dwell = Math.round(window.innerHeight * 0.55);
+    var scenes = Array.from(document.querySelectorAll('.card-scene'));
 
-    document.querySelectorAll('.card-scene').forEach(function (scene) {
-      var card = scene.querySelector('.stack-card');
-      if (!card) return;
-
-      card.style.position = 'absolute';
-      card.style.left = '0';
-      card.style.right = '0';
-      card.style.top = '0';
-
-      // Scene height = card height + dwell so next card enters after dwell scroll
-      scene.style.minHeight = (card.offsetHeight + dwell) + 'px';
-    });
+    function setup() {
+      var dwell = Math.round(window.innerHeight * 0.65);
+      scenes.forEach(function (scene) {
+        var card = scene.querySelector('.stack-card');
+        if (!card) return;
+        var cardH = card.offsetHeight;
+        // Scene is exactly cardH + dwell so the card stays pinned during dwell
+        scene.style.height = (cardH + dwell) + 'px';
+      });
+      update();
+    }
 
     function update() {
-      document.querySelectorAll('.card-scene').forEach(function (scene) {
+      scenes.forEach(function (scene) {
         var card = scene.querySelector('.stack-card');
         if (!card) return;
         var rect = scene.getBoundingClientRect();
         var cardH = card.offsetHeight;
         var sceneH = scene.offsetHeight;
-        // How far the scene top has scrolled past the sticky threshold
+        // Pin card at navH: offset = scroll past navH, clamped to dwell range
         var offset = Math.max(0, Math.min(sceneH - cardH, navH - rect.top));
         card.style.top = offset + 'px';
       });
     }
 
+    // Measure after full load so fonts/images don't skew card heights
+    if (document.readyState === 'complete') {
+      setup();
+    } else {
+      window.addEventListener('load', setup);
+    }
+
     window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', function () {
-      // Recalculate scene heights on resize
-      document.querySelectorAll('.card-scene').forEach(function (scene) {
-        var card = scene.querySelector('.stack-card');
-        if (!card) return;
-        scene.style.minHeight = (card.offsetHeight + dwell) + 'px';
-      });
-      update();
-    });
-    update();
+    window.addEventListener('resize', setup);
   }
 
   function initJourney() {

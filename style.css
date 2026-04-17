@@ -3257,19 +3257,18 @@ mark.highlight {
 
 .card-scene {
   position: relative;
-  padding-bottom: 50vh;
-}
-
-.card-scene:last-child {
-  padding-bottom: 20vh;
+  /* height set by JS — no CSS padding needed */
 }
 
 .stack-card {
-  position: relative; /* JS overrides to absolute for scroll-driven sticky */
+  position: absolute; /* JS-driven sticky: top is set by scroll listener */
+  left: 0;
+  right: 0;
+  top: 0;
   border-radius: 28px;
   overflow: hidden;
   box-shadow: 0 -2px 0 rgba(0,0,0,0.08), 0 12px 56px rgba(0, 0, 0, 0.14);
-  min-height: 60vh;
+  min-height: calc(100vh - var(--nav-height));
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -3291,9 +3290,7 @@ mark.highlight {
 
 @media (max-width: 768px) {
   .card-stack { padding: 10px 10px 0; }
-  .card-scene { padding-bottom: 40vh; }
-  .card-scene:last-child { padding-bottom: 16vh; }
-  .stack-card { border-radius: 20px; min-height: 50vh; }
+  .stack-card { border-radius: 20px; }
 }
 
 /* ═══════════════════════════════════════════════════════
