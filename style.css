@@ -3299,3 +3299,69 @@ mark.highlight {
   color: var(--text-secondary);
   line-height: 1.75;
 }
+
+/* ═══════════════════════════════════════════════════════
+   STACKING CARDS SCROLL EFFECT
+   ═══════════════════════════════════════════════════════ */
+
+.card-stack {
+  background: var(--bg-primary);
+  padding: 20px 20px 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.stack-card {
+  position: sticky;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.09), 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Remove summary's own border lines — the card border replaces them */
+.stack-card.summary {
+  border-top: none;
+  border-bottom: none;
+}
+
+/* Stack A: Summary (lime cream) → Course Path (sky blue) */
+.card-stack--a .stack-card:nth-child(1) {
+  top: calc(var(--nav-height) + 10px);
+  z-index: 10;
+  background: #EEFFB8 !important;
+}
+
+.card-stack--a .stack-card:nth-child(2) {
+  top: calc(var(--nav-height) + 26px);
+  z-index: 11;
+  background: #DDEFFF !important;
+}
+
+/* Stack B: Structure (peach) → Sessions (white) → FAQ (lavender) */
+.card-stack--b .stack-card:nth-child(1) {
+  top: calc(var(--nav-height) + 10px);
+  z-index: 10;
+  background: #FFE8D0 !important;
+}
+
+.card-stack--b .stack-card:nth-child(2) {
+  top: calc(var(--nav-height) + 26px);
+  z-index: 11;
+  background: #FFFFFF !important;
+}
+
+.card-stack--b .stack-card:nth-child(3) {
+  top: calc(var(--nav-height) + 42px);
+  z-index: 12;
+  background: #F2EAFF !important;
+}
+
+@media (max-width: 768px) {
+  .card-stack {
+    padding: 12px 12px 56px;
+  }
+  .stack-card {
+    border-radius: 20px;
+  }
+}
