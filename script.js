@@ -165,10 +165,19 @@
       });
     }
 
-    // ── If reduced motion, skip scroll animation — just show first frame ──
-    if (prefersReducedMotion) {
-      resizeCanvas();
-      return;
+    // ── Mobile / reduced-motion: skip scroll animation, show content immediately ──
+    var isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile || prefersReducedMotion) {
+      if (heroContent) {
+        heroContent.style.opacity = '1';
+        heroContent.style.transform = 'none';
+        heroContent.style.transition = 'none';
+      }
+      if (overlay) {
+        overlay.style.background =
+          'linear-gradient(to top, rgba(5,5,8,0.9) 0%, rgba(5,5,8,0.55) 45%, rgba(5,5,8,0.15) 80%, transparent 100%)';
+      }
+      return; // no canvas animation on mobile
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -466,7 +475,9 @@
   // ═══════════════════════════════════════════════════════
 
   function initMobileHeroScroll() {
+    // Hero is 100vh on mobile — no auto-scroll needed
     if (!('ontouchstart' in window)) return;
+    if (window.matchMedia('(max-width: 768px)').matches) return;
 
     var hero = document.getElementById('hero');
     if (!hero) return;
