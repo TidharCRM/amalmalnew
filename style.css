@@ -274,10 +274,28 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
    HERO — Scroll Frame Animation
    ═══════════════════════════════════════════════════════ */
 
+/* Reading progress bar */
+.reading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-hot) 100%);
+  z-index: 9999;
+  pointer-events: none;
+  will-change: width;
+}
+
+.body--hero-lock {
+  overflow: hidden;
+}
+
 .hero {
   position: relative;
-  height: 400vh;  /* Long scroll zone for frame scrubbing */
+  height: 400vh;
   width: 100%;
+  background: #1A1614;
 }
 
 .hero__sticky {

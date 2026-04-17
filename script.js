@@ -16,14 +16,14 @@
     const hero = document.getElementById('hero');
     const overlay = document.querySelector('.hero__overlay');
     const heroContent = document.querySelector('.hero__content');
-    const scrollHint = document.getElementById('scroll-hint');
-
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
     const frames = [];
     let loadedCount = 0;
     let currentFrame = 0;
     let ticking = false;
+    let heroComplete = false;
 
     function resizeCanvas() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -62,17 +62,14 @@
       ctx.drawImage(img, dx, dy, dw, dh);
     }
 
-    var isMobile = window.matchMedia('(max-width: 768px)').matches;
-
     // ── Shared: apply progress → frame + overlay + content reveal ──
     function applyProgress(progress) {
-      var frameIndex = Math.min(FRAME_COUNT - 1, Math.floor(progress * FRAME_COUNT));
+      const frameIndex = Math.min(FRAME_COUNT - 1, Math.floor(progress * FRAME_COUNT));
       if (frameIndex !== currentFrame) {
         currentFrame = frameIndex;
         drawFrame(currentFrame);
       }
-
-      var overlayBase;
+      let overlayBase;
       if (progress < 0.75) {
         overlayBase = progress * 0.2;
       } else {
@@ -84,13 +81,11 @@
         'rgba(5,5,8,' + (overlayBase * 0.25).toFixed(3) + ') 0%, ' +
         'rgba(5,5,8,' + overlayBase.toFixed(3) + ') 65%, ' +
         'rgba(5,5,8,' + Math.min(0.85, overlayBase * 1.1).toFixed(3) + ') 100%)';
-
       if (heroContent) {
-        var REVEAL_START = 0.78;
-        var REVEAL_END   = 0.96;
-        var t = 0;
+        const REVEAL_START = 0.78, REVEAL_END = 0.96;
+        let t = 0;
         if (progress >= REVEAL_START) {
-          var raw = Math.min(1, (progress - REVEAL_START) / (REVEAL_END - REVEAL_START));
+          const raw = Math.min(1, (progress - REVEAL_START) / (REVEAL_END - REVEAL_START));
           t = 1 - Math.pow(1 - raw, 3);
         }
         heroContent.style.opacity = t;
@@ -111,7 +106,6 @@
       frames.push(img);
     }
 
-    // ── Reduced-motion: show content immediately ──
     if (prefersReducedMotion) {
       if (heroContent) {
         heroContent.style.opacity = '1';
@@ -122,43 +116,96 @@
       return;
     }
 
+    resizeCanvas();
+    window.addEventListener('resize', function () {
+      scrollableH = hero.offsetHeight - window.innerHeight;
+      resizeCanvas();
+    });
 
-    // ── DESKTOP: scroll-based scrubbing ──
+    // ── DESKTOP: wheel-locked virtual scroll ──
+    let virtualY = 0;
+    let scrollableH = hero.offsetHeight - window.innerHeight;
+
+    function finishHero() {
+      if (heroComplete) return;
+      heroComplete = true;
+      applyProgress(1);
+      document.body.classList.remove('body--hero-lock');
+      window.removeEventListener('wheel', onWheel);
+      setTimeout(function () {
+        window.scrollTo(0, hero.offsetTop + hero.offsetHeight);
+      }, 16);
+    }
+
+    function onWheel(e) {
+      if (heroComplete) return;
+      e.preventDefault();
+      virtualY = Math.max(0, Math.min(scrollableH, virtualY + e.deltaY));
+      if (virtualY >= scrollableH * 0.99) { finishHero(); return; }
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(function () {
+          applyProgress(scrollableH > 0 ? virtualY / scrollableH : 0);
+          ticking = false;
+        });
+      }
+    }
+
+    // ── MOBILE: scroll-driven + auto-scroll on first swipe ──
     function onScroll() {
       if (ticking) return;
       ticking = true;
-
       requestAnimationFrame(function () {
         const rect = hero.getBoundingClientRect();
-        const scrollableHeight = hero.offsetHeight - window.innerHeight;
-        const scrolled = -rect.top;
-        const progress = Math.max(0, Math.min(1, scrolled / scrollableHeight));
-
+        const sh = hero.offsetHeight - window.innerHeight;
+        const progress = Math.max(0, Math.min(1, -rect.top / sh));
         applyProgress(progress);
-
-        if (scrollHint) {
-          scrollHint.classList.toggle('hidden', progress > 0.04);
-        }
-
-        var progressBar = document.getElementById('hero-progress');
-        var progressFill = document.getElementById('hero-progress-fill');
-        if (progressBar && progressFill) {
-          if (progress > 0.01 && progress < 0.99) {
-            progressBar.classList.add('hero__progress--visible');
-            progressFill.style.width = (progress * 100) + '%';
-          } else {
-            progressBar.classList.remove('hero__progress--visible');
-          }
-        }
-
         ticking = false;
       });
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    onScroll();
+    function initMobileAutoScroll() {
+      let triggered = false;
+      let rafId = null;
+
+      function cancelAuto() {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        document.removeEventListener('touchstart', cancelAuto);
+      }
+
+      document.addEventListener('touchend', function onFirstSwipe() {
+        if (triggered || window.scrollY > 20) return;
+        triggered = true;
+        document.removeEventListener('touchend', onFirstSwipe);
+
+        const startY = window.scrollY;
+        const targetY = hero.offsetTop + hero.offsetHeight;
+        if (targetY <= startY) return;
+
+        let startTime = null;
+        const duration = 2600;
+        function ease(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          const t = Math.min(1, (ts - startTime) / duration);
+          window.scrollTo(0, startY + (targetY - startY) * ease(t));
+          rafId = t < 1 ? requestAnimationFrame(step) : null;
+        }
+
+        rafId = requestAnimationFrame(step);
+        document.addEventListener('touchstart', cancelAuto, { passive: true, once: true });
+      }, { passive: true });
+    }
+
+    if (isMobile) {
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      initMobileAutoScroll();
+    } else {
+      document.body.classList.add('body--hero-lock');
+      window.addEventListener('wheel', onWheel, { passive: false });
+    }
   }
 
   // ═══════════════════════════════════════════════════════
@@ -623,6 +670,16 @@
     });
   }
 
+  function initReadingProgress() {
+    var bar = document.getElementById('reading-bar');
+    if (!bar) return;
+    function update() {
+      var docH = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = docH > 0 ? Math.min(100, window.scrollY / docH * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+  }
+
   function initLeadForm() {
     var form = document.getElementById('lead-form');
     var success = document.getElementById('lead-success');
@@ -652,6 +709,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    initReadingProgress();
     initHeroAnimation();
     initNav();
     initStatsCounter();
