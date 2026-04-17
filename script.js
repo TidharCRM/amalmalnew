@@ -134,12 +134,16 @@
     let virtualY = 0;
     let scrollableH = hero.offsetHeight - window.innerHeight;
 
+    function preventTouchScroll(e) { e.preventDefault(); }
+
     function finishHero() {
       if (heroComplete) return;
       heroComplete = true;
       applyProgress(1);
       document.body.classList.remove('body--hero-lock');
       document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+      document.removeEventListener('touchmove', preventTouchScroll);
       window.removeEventListener('wheel', onWheel);
       requestAnimationFrame(function () {
         requestAnimationFrame(function () {
@@ -162,66 +166,26 @@
       }
     }
 
-    // ── MOBILE: scroll-driven + auto-scroll on first swipe ──
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        const rect = hero.getBoundingClientRect();
-        const sh = hero.offsetHeight - window.innerHeight;
-        const progress = Math.max(0, Math.min(1, -rect.top / sh));
-        applyProgress(progress);
-        ticking = false;
-      });
-    }
-
-    function initMobileAutoScroll() {
-      let triggered = false;
-      let rafId = null;
-
-      function cancelAuto() {
-        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-        document.removeEventListener('touchstart', cancelAuto);
-      }
-
-      document.addEventListener('touchend', function onFirstSwipe() {
-        if (triggered) return;
-        // Stop at animation-complete point (sticky still fully on screen)
-        const heroEnd = hero.offsetTop + hero.offsetHeight - window.innerHeight;
-        if (window.scrollY >= heroEnd) {
-          document.removeEventListener('touchend', onFirstSwipe);
-          return;
-        }
-        triggered = true;
-        document.removeEventListener('touchend', onFirstSwipe);
-
-        const startY = window.scrollY;
-        const targetY = heroEnd;
-        if (targetY <= startY) return;
-
-        let startTime = null;
-        const duration = 2600;
-        function ease(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
-
-        function step(ts) {
-          if (!startTime) startTime = ts;
-          const t = Math.min(1, (ts - startTime) / duration);
-          window.scrollTo(0, startY + (targetY - startY) * ease(t));
-          rafId = t < 1 ? requestAnimationFrame(step) : null;
-        }
-
-        rafId = requestAnimationFrame(step);
-        document.addEventListener('touchstart', cancelAuto, { passive: true, once: true });
-      }, { passive: true });
-    }
+    // Lock scroll on all devices during hero animation
+    document.body.classList.add('body--hero-lock');
 
     if (isMobile) {
-      document.body.style.overflow = ''; // clear any inline lock from early script on narrow desktops
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-      initMobileAutoScroll();
+      // Hard-block touch scrolling on iOS (overflow:hidden alone is not enough)
+      document.body.style.touchAction = 'none';
+      document.addEventListener('touchmove', preventTouchScroll, { passive: false });
+
+      // Auto-play animation — user watches, cannot scroll until done
+      const AUTOPLAY_MS = 4000;
+      let autoStart = null;
+      function autoPlayStep(ts) {
+        if (heroComplete) return;
+        if (!autoStart) autoStart = ts;
+        const prog = Math.min(1, (ts - autoStart) / AUTOPLAY_MS);
+        applyProgress(prog);
+        if (prog < 1) { requestAnimationFrame(autoPlayStep); } else { finishHero(); }
+      }
+      requestAnimationFrame(autoPlayStep);
     } else {
-      document.body.classList.add('body--hero-lock');
       window.addEventListener('wheel', onWheel, { passive: false });
     }
   }
