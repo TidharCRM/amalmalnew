@@ -3257,11 +3257,11 @@ mark.highlight {
 
 .card-scene {
   position: relative;
-  padding-bottom: 120vh;
+  padding-bottom: 50vh;
 }
 
 .card-scene:last-child {
-  padding-bottom: 60vh;
+  padding-bottom: 20vh;
 }
 
 .stack-card {
@@ -3292,8 +3292,8 @@ mark.highlight {
 
 @media (max-width: 768px) {
   .card-stack { padding: 10px 10px 0; }
-  .card-scene { padding-bottom: 90vh; }
-  .card-scene:last-child { padding-bottom: 40vh; }
+  .card-scene { padding-bottom: 40vh; }
+  .card-scene:last-child { padding-bottom: 16vh; }
   .stack-card { border-radius: 20px; min-height: 50vh; }
 }
 
