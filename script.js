@@ -161,7 +161,7 @@
 
       requestAnimationFrame(function () {
         requestAnimationFrame(function () {
-          window.scrollTo(0, hero.offsetTop + hero.offsetHeight - window.innerHeight);
+          window.scrollTo({ top: hero.offsetTop + hero.offsetHeight - window.innerHeight, behavior: 'instant' });
         });
       });
     }
@@ -671,7 +671,8 @@
     var navH = 72;
     var scenes = Array.from(document.querySelectorAll('.card-scene'));
 
-    function setup() {
+    function setup(preserveScroll) {
+      var savedY = preserveScroll ? window.scrollY : 0;
       var dwell = Math.round(window.innerHeight * 0.7);
       var prevCardH = 0;
       var prevParent = null;
@@ -694,31 +695,38 @@
         prevCardH = cardH;
         prevParent = parent;
       });
+
+      // Restore scroll after layout change to prevent jump
+      if (preserveScroll) window.scrollTo({ top: savedY, behavior: 'instant' });
       update();
     }
 
+    var stickyTicking = false;
     function update() {
-      scenes.forEach(function (scene) {
-        var card = scene.querySelector('.stack-card');
-        if (!card) return;
-        var rect = scene.getBoundingClientRect();
-        var cardH = card.offsetHeight;
-        var sceneH = scene.offsetHeight;
-        // Pin card at navH: offset = scroll past navH, clamped to dwell range
-        var offset = Math.max(0, Math.min(sceneH - cardH, navH - rect.top));
-        card.style.top = offset + 'px';
+      if (stickyTicking) return;
+      stickyTicking = true;
+      requestAnimationFrame(function () {
+        scenes.forEach(function (scene) {
+          var card = scene.querySelector('.stack-card');
+          if (!card) return;
+          var rect = scene.getBoundingClientRect();
+          var cardH = card.offsetHeight;
+          var sceneH = scene.offsetHeight;
+          // Pin card at navH: offset = scroll past navH, clamped to dwell range
+          var offset = Math.max(0, Math.min(sceneH - cardH, navH - rect.top));
+          card.style.top = offset + 'px';
+        });
+        stickyTicking = false;
       });
     }
 
-    // Measure after full load so fonts/images don't skew card heights
-    if (document.readyState === 'complete') {
-      setup();
-    } else {
-      window.addEventListener('load', setup);
-    }
+    // Run immediately so layout is set before user can scroll
+    setup(false);
+    // Re-run after full load in case fonts changed card heights
+    window.addEventListener('load', function () { setup(true); });
 
     window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', setup);
+    window.addEventListener('resize', function () { setup(true); });
   }
 
   function initJourney() {
@@ -729,8 +737,16 @@
     if (!rail || !fill || !section) return;
 
     var milestones = Array.from(rail.querySelectorAll('.jm'));
+    var journeyTicking = false;
 
     function update() {
+      if (journeyTicking) return;
+      journeyTicking = true;
+      requestAnimationFrame(doUpdate);
+    }
+
+    function doUpdate() {
+      journeyTicking = false;
       var sRect = section.getBoundingClientRect();
       var sH = section.offsetHeight;
       var vpH = window.innerHeight;
@@ -741,10 +757,13 @@
       // Grow the road fill
       fill.style.height = (progress * 100) + '%';
 
-      // Move avatar along the rail
+      // Move avatar along the rail, clamped so it stays inside the road
       if (avatar) {
         var railH = rail.offsetHeight;
-        avatar.style.top = (progress * railH) + 'px';
+        var avatarH = avatar.offsetHeight || 28;
+        var minTop = avatarH / 2;
+        var maxTop = railH - avatarH / 2;
+        avatar.style.top = (minTop + progress * (maxTop - minTop)) + 'px';
       }
 
       // Reveal milestone cards as fill passes each one
