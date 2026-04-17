@@ -386,89 +386,65 @@
   </div><!-- /card-stack--b -->
 
   <!-- ═══════════════════════════════════════════ -->
-  <!-- TESTIMONIALS — scattered IG comments        -->
+  <!-- TESTIMONIALS — stacked card carousel        -->
   <!-- ═══════════════════════════════════════════ -->
   <section id="testimonials" class="testimonials">
-    <div class="testimonials__title-row">
-      <h2 class="section__title section__title--center">מה אומרות מי שכבר בפנים</h2>
+    <div class="container">
+      <h2 class="section__title section__title--center testimonials__heading">מה אומרות מי שכבר בפנים</h2>
     </div>
-    <div class="testimonials__scene">
+    <div class="testimonials__wrap">
+      <div class="testimonials__deck" id="testimonials-deck">
 
-      <div class="igc igc--1" data-igc>
-        <div class="igc__header">
-          <div class="igc__avatar">מ</div>
-          <div class="igc__meta">
-            <span class="igc__user">@maya.creative</span>
-            <span class="igc__time">2 שעות</span>
+        <div class="tcard" data-pos="0" style="--c:#C5F135;--ct:#1A1614">
+          <span class="tcard__q">&ldquo;</span>
+          <p class="tcard__text">הקורס הזה נתן לי את הביטחון שחיכיתי לו — סוף סוף התחלתי, ולא הפסקתי</p>
+          <div class="tcard__author">
+            <div class="tcard__av">מ</div>
+            <div><strong class="tcard__name">מ׳</strong><span class="tcard__role">יועצת תקשורת</span></div>
           </div>
         </div>
-        <p class="igc__text">הקורס הזה נתן לי את הביטחון שחיכיתי לו — סוף סוף התחלתי, ולא הפסקתי 🔥</p>
-        <div class="igc__footer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span>47</span>
-        </div>
-      </div>
 
-      <div class="igc igc--2" data-igc>
-        <div class="igc__header">
-          <div class="igc__avatar">ש</div>
-          <div class="igc__meta">
-            <span class="igc__user">@shira.designs</span>
-            <span class="igc__time">5 שעות</span>
+        <div class="tcard" data-pos="1" style="--c:#FF6130;--ct:#fff">
+          <span class="tcard__q">&ldquo;</span>
+          <p class="tcard__text">פתאום אנשים התחילו לפנות אליי לבד. זה הרגיש כאילו משהו נפתח</p>
+          <div class="tcard__author">
+            <div class="tcard__av">ש</div>
+            <div><strong class="tcard__name">ש׳</strong><span class="tcard__role">מעצבת פנים</span></div>
           </div>
         </div>
-        <p class="igc__text">פתאום אנשים התחילו לפנות אליי לבד. זה הרגיש כאילו משהו נפתח ✨</p>
-        <div class="igc__footer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span>83</span>
-        </div>
-      </div>
 
-      <div class="igc igc--3" data-igc>
-        <div class="igc__header">
-          <div class="igc__avatar">ר</div>
-          <div class="igc__meta">
-            <span class="igc__user">@roni.fit</span>
-            <span class="igc__time">אתמול</span>
+        <div class="tcard" data-pos="2" style="--c:#00CFFF;--ct:#1A1614">
+          <span class="tcard__q">&ldquo;</span>
+          <p class="tcard__text">לא האמנתי שזה יעבוד ככה מהר. תוך שבועיים כבר ראיתי תוצאות</p>
+          <div class="tcard__author">
+            <div class="tcard__av">ר</div>
+            <div><strong class="tcard__name">ר׳</strong><span class="tcard__role">מאמנת כושר</span></div>
           </div>
         </div>
-        <p class="igc__text">לא האמנתי שזה יעבוד ככה מהר. תוך שבועיים כבר ראיתי תוצאות 🙌</p>
-        <div class="igc__footer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span>61</span>
-        </div>
-      </div>
 
-      <div class="igc igc--4" data-igc>
-        <div class="igc__header">
-          <div class="igc__avatar">נ</div>
-          <div class="igc__meta">
-            <span class="igc__user">@noa.content</span>
-            <span class="igc__time">3 ימים</span>
+        <div class="tcard" data-pos="3" style="--c:#9B5EFF;--ct:#fff">
+          <span class="tcard__q">&ldquo;</span>
+          <p class="tcard__text">אמלמל מסבירה בצורה כזו ברורה שאפילו אני — שלא נגעתי בשום עריכה — הצלחתי</p>
+          <div class="tcard__author">
+            <div class="tcard__av">נ</div>
+            <div><strong class="tcard__name">נ׳</strong><span class="tcard__role">יוצרת תוכן</span></div>
           </div>
         </div>
-        <p class="igc__text">אמלמל מסבירה בצורה כזו ברורה שאפילו אני — שלא נגעתי בשום עריכה — הצלחתי 💪</p>
-        <div class="igc__footer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span>29</span>
-        </div>
-      </div>
 
-      <div class="igc igc--5" data-igc>
-        <div class="igc__header">
-          <div class="igc__avatar">ל</div>
-          <div class="igc__meta">
-            <span class="igc__user">@lior.biz</span>
-            <span class="igc__time">שבוע</span>
+        <div class="tcard" data-pos="4" style="--c:#FFE135;--ct:#1A1614">
+          <span class="tcard__q">&ldquo;</span>
+          <p class="tcard__text">בעל עסק כאן — הסרטונים שלי קיבלו פי 4 צפיות אחרי הקורס. ממליץ בחום</p>
+          <div class="tcard__author">
+            <div class="tcard__av">ל</div>
+            <div><strong class="tcard__name">ל׳</strong><span class="tcard__role">בעל עסק</span></div>
           </div>
         </div>
-        <p class="igc__text">בעל עסק כאן — הסרטונים שלי קיבלו פי 4 צפיות אחרי הקורס. ממליץ בחום 🎬</p>
-        <div class="igc__footer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span>112</span>
-        </div>
-      </div>
 
+      </div>
+      <div class="testimonials__nav">
+        <button class="testimonials__btn" id="tprev" aria-label="הקודם">←</button>
+        <button class="testimonials__btn" id="tnext" aria-label="הבא">→</button>
+      </div>
     </div>
   </section>
 
@@ -516,7 +492,7 @@
         <div class="contact__content">
           <h2 class="section__title">מוכנה להפסיק לחשוב —<br />ולהתחיל ליצור?</h2>
           <p class="contact__desc">השאירי פרטים ואחזור אליך עם כל המידע על הקורס הבא.</p>
-          <form class="lead-form" id="lead-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
+          <form class="lead-form" id="lead-form" action="https://formspree.io/f/xjgjwynp" method="POST" novalidate>
             <div class="lead-form__field">
               <label for="lead-name">שם מלא</label>
               <input type="text" id="lead-name" name="name" placeholder="השם שלך" required autocomplete="name" />
