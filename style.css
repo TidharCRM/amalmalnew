@@ -3368,3 +3368,232 @@ mark.highlight {
     border-radius: 20px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════
+   CP-COL HEADING (replaces pill label)
+   ═══════════════════════════════════════════════════════ */
+
+.cp-col__heading {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 28px;
+  letter-spacing: -0.01em;
+}
+
+/* ═══════════════════════════════════════════════════════
+   STR SESSION NOTE + SUPPORT
+   ═══════════════════════════════════════════════════════ */
+
+.str-session__note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.str-support {
+  margin-top: 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.sessions__support {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* ═══════════════════════════════════════════════════════
+   TESTIMONIALS — scattered IG comment cards
+   ═══════════════════════════════════════════════════════ */
+
+.testimonials {
+  background: var(--bg-secondary);
+  padding: 100px 0 120px;
+}
+
+.testimonials__title-row {
+  text-align: center;
+  margin-bottom: 72px;
+  padding: 0 24px;
+}
+
+.testimonials__scene {
+  position: relative;
+  max-width: 960px;
+  margin: 0 auto;
+  height: 680px;
+  padding: 0 24px;
+}
+
+.igc {
+  position: absolute;
+  width: 290px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 20px 22px;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.05);
+  opacity: 0;
+  transform: scale(0.55) rotate(var(--r, 0deg));
+  transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out);
+  will-change: transform, opacity;
+}
+
+.igc.visible {
+  opacity: 1;
+  transform: scale(1) rotate(var(--r, 0deg));
+}
+
+.igc--1 { top: 2%;  left: 3%;   --r: -5deg; }
+.igc--2 { top: 4%;  right: 4%;  --r:  4deg; }
+.igc--3 { top: 38%; left: 20%;  --r: -3deg; }
+.igc--4 { top: 48%; right: 5%;  --r:  7deg; }
+.igc--5 { top: 72%; left: 6%;   --r: -4deg; }
+
+.igc__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.igc__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.88rem;
+  flex-shrink: 0;
+}
+
+.igc__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.igc__user {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  direction: ltr;
+}
+
+.igc__time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.igc__text {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+
+.igc__footer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #e0245e;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.igc__footer svg {
+  stroke: #e0245e;
+  fill: #e0245e;
+}
+
+@media (max-width: 768px) {
+  .testimonials__scene {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .igc {
+    position: static;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    --r: 0deg !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   LEAD FORM
+   ═══════════════════════════════════════════════════════ */
+
+.lead-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.lead-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lead-form__field label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.lead-form__field input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  color: var(--text-primary);
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  text-align: right;
+  direction: rtl;
+}
+
+.lead-form__field input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(212,43,33,0.1);
+}
+
+.lead-form__field input::placeholder {
+  color: var(--text-muted);
+}
+
+.lead-form__submit {
+  margin-top: 6px;
+  width: 100%;
+  justify-content: center;
+}
+
+.lead-form__success {
+  margin-top: 24px;
+  padding: 24px;
+  background: rgba(37,211,102,0.07);
+  border: 1px solid rgba(37,211,102,0.22);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #1a8c4e;
+  line-height: 1.6;
+}

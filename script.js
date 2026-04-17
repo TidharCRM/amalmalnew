@@ -565,6 +565,52 @@
     steps.forEach(function (el) { obs.observe(el); });
   }
 
+  function initIgcReveal() {
+    var cards = document.querySelectorAll('[data-igc]');
+    if (!cards.length) return;
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          var delay = parseInt(e.target.dataset.igcDelay || 0);
+          setTimeout(function () { e.target.classList.add('visible'); }, delay);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    cards.forEach(function (c, i) {
+      c.dataset.igcDelay = i * 160;
+      obs.observe(c);
+    });
+  }
+
+  function initLeadForm() {
+    var form = document.getElementById('lead-form');
+    var success = document.getElementById('lead-success');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn = document.getElementById('lead-submit');
+      btn.disabled = true;
+      btn.textContent = 'שולח...';
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function (r) {
+        if (r.ok) {
+          form.style.display = 'none';
+          success.removeAttribute('hidden');
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'שלחי לי פרטים';
+        }
+      }).catch(function () {
+        btn.disabled = false;
+        btn.textContent = 'שלחי לי פרטים';
+      });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     initHeroAnimation();
     initNav();
@@ -577,5 +623,7 @@
     initCountdown();
     initSnekReveal();
     initFaq();
+    initIgcReveal();
+    initLeadForm();
   });
 })();
