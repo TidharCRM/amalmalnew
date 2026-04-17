@@ -672,13 +672,27 @@
     var scenes = Array.from(document.querySelectorAll('.card-scene'));
 
     function setup() {
-      var dwell = Math.round(window.innerHeight * 0.65);
+      var dwell = Math.round(window.innerHeight * 0.7);
+      var prevCardH = 0;
+      var prevParent = null;
+
       scenes.forEach(function (scene) {
         var card = scene.querySelector('.stack-card');
         if (!card) return;
         var cardH = card.offsetHeight;
-        // Scene is exactly cardH + dwell so the card stays pinned during dwell
+        var parent = scene.parentElement;
+
+        // Overlap each scene with the previous card so they hit navH simultaneously.
+        // Reset at the start of each card-stack (different parent).
+        if (parent === prevParent && prevCardH > 0) {
+          scene.style.marginTop = '-' + prevCardH + 'px';
+        } else {
+          scene.style.marginTop = '';
+        }
+
         scene.style.height = (cardH + dwell) + 'px';
+        prevCardH = cardH;
+        prevParent = parent;
       });
       update();
     }
