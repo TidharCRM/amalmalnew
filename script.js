@@ -565,21 +565,61 @@
     steps.forEach(function (el) { obs.observe(el); });
   }
 
-  function initIgcReveal() {
-    var cards = document.querySelectorAll('[data-igc]');
-    if (!cards.length) return;
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          var delay = parseInt(e.target.dataset.igcDelay || 0);
-          setTimeout(function () { e.target.classList.add('visible'); }, delay);
-          obs.unobserve(e.target);
-        }
+  function initTestimonialsCarousel() {
+    var deck = document.getElementById('testimonials-deck');
+    if (!deck) return;
+
+    var cards = Array.from(deck.querySelectorAll('.tcard'));
+    var total = cards.length;
+    var animating = false;
+
+    function getPos(card) { return parseInt(card.dataset.pos, 10); }
+
+    function advance() {
+      if (animating) return;
+      animating = true;
+
+      var front = cards.find(function (c) { return getPos(c) === 0; });
+      front.classList.add('tcard--exit');
+
+      setTimeout(function () {
+        front.classList.remove('tcard--exit');
+        cards.forEach(function (c) {
+          var p = getPos(c);
+          c.dataset.pos = (p - 1 + total) % total;
+        });
+        animating = false;
+      }, 450);
+    }
+
+    function retreat() {
+      if (animating) return;
+      animating = true;
+
+      cards.forEach(function (c) {
+        var p = getPos(c);
+        c.dataset.pos = (p + 1) % total;
       });
-    }, { threshold: 0.12 });
-    cards.forEach(function (c, i) {
-      c.dataset.igcDelay = i * 160;
-      obs.observe(c);
+
+      var newFront = cards.find(function (c) { return getPos(c) === 0; });
+      newFront.classList.add('tcard--exit');
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          newFront.classList.remove('tcard--exit');
+          animating = false;
+        });
+      });
+    }
+
+    document.getElementById('tnext').addEventListener('click', advance);
+    document.getElementById('tprev').addEventListener('click', retreat);
+
+    /* swipe support */
+    var touchStartX = 0;
+    deck.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+    deck.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) { dx < 0 ? advance() : retreat(); }
     });
   }
 
@@ -623,7 +663,7 @@
     initCountdown();
     initSnekReveal();
     initFaq();
-    initIgcReveal();
+    initTestimonialsCarousel();
     initLeadForm();
   });
 })();
