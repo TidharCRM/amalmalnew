@@ -192,14 +192,29 @@
     });
   });
 
-  // Next-cycle countdown state (shared with admin)
-  var CYCLE_KEY = 'cutit:nextCycle';
+  // Next-cycle countdown state (shared with admin, synced via Firebase RTDB)
+  var FIREBASE_URL = 'https://amalmal-default-rtdb.firebaseio.com/countdownDate.json';
   var CYCLE_DEFAULT = new Date('2026-06-01T10:00:00').getTime();
-  function getCycleTarget(){
-    var saved = localStorage.getItem(CYCLE_KEY);
-    var n = saved ? parseInt(saved, 10) : NaN;
-    return isNaN(n) ? CYCLE_DEFAULT : n;
+  var cycleTarget = CYCLE_DEFAULT;
+
+  function getCycleTarget(){ return cycleTarget; }
+
+  function loadFromFirebase(){
+    return fetch(FIREBASE_URL, { cache: 'no-store' })
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (typeof data === 'string') {
+          var d = new Date(data);
+          if (!isNaN(d.getTime())) {
+            cycleTarget = d.getTime();
+            if (window.__cutitTickCountdown) window.__cutitTickCountdown();
+          }
+        }
+      })
+      .catch(function(){});
   }
+  loadFromFirebase();
+  setInterval(loadFromFirebase, 60000);
 
   // Bigcard countdown
   (function(){
@@ -237,9 +252,18 @@
       if (input === null) return;
       var d = new Date(input);
       if (isNaN(d.getTime())) { alert('תאריך לא תקין'); return; }
-      localStorage.setItem(CYCLE_KEY, String(d.getTime()));
-      if (window.__cutitTickCountdown) window.__cutitTickCountdown();
-      alert('התאריך עודכן');
+      fetch(FIREBASE_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input)
+      }).then(function(r){
+        if (!r.ok) throw new Error('save failed');
+        cycleTarget = d.getTime();
+        if (window.__cutitTickCountdown) window.__cutitTickCountdown();
+        alert('התאריך עודכן');
+      }).catch(function(){
+        alert('שגיאה בשמירה. בדוק הרשאות Firebase.');
+      });
     });
   })();
 
