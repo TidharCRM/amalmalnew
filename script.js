@@ -2,7 +2,7 @@
   'use strict';
 
   // Hero — frame scrubber
-  var FRAME_COUNT = 87;
+  var FRAME_COUNT = 161;
   var LOGO_START  = 0.82; // logo fades in at this scroll fraction
 
   var heroPin     = document.getElementById('hero-pin');
@@ -48,6 +48,8 @@
       if (drawnIndex >= 0 && frames[drawnIndex]) fitDraw(frames[drawnIndex]);
     }
 
+    var navLogo = document.querySelector('.nav__logo');
+
     function updateHero() {
       var maxScroll = heroPin.offsetHeight - window.innerHeight;
       if (maxScroll <= 0) return;
@@ -62,6 +64,13 @@
 
       // Hint fades out quickly
       heroHint.style.opacity = Math.max(0, 1 - p * 7).toFixed(2);
+
+      // Nav logo: hide only while the hero's big logo is on screen
+      if (navLogo) {
+        var pinBottom = heroPin.getBoundingClientRect().bottom;
+        var heroLogoShowing = logoP > 0.15 && pinBottom > 0;
+        navLogo.classList.toggle('nav__logo--hidden', heroLogoShowing);
+      }
     }
 
     // Preload all frames; redraw on each load so animation works during loading
