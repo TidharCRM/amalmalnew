@@ -96,6 +96,8 @@ h1, h2, h3, h4 { font-family: var(--headline); }
 .hero-pin {
   height: 250vh;
   position: relative;
+  background: #000;
+  z-index: 1;
 }
 .hero {
   position: sticky;
@@ -171,8 +173,6 @@ h1, h2, h3, h4 { font-family: var(--headline); }
   font-size: 22px;
   border-top: var(--border);
   border-bottom: var(--border);
-  transform: skewY(-1.5deg);
-  margin: -12px 0;
   position: relative;
   z-index: 2;
 }
@@ -181,10 +181,9 @@ h1, h2, h3, h4 { font-family: var(--headline); }
   white-space: nowrap;
   animation: marquee 38s linear infinite;
   padding-inline-start: 28px;
-  transform: skewY(1.5deg);
 }
 .marquee__sep { color: var(--pink); opacity: .9; }
-@keyframes marquee { to { transform: skewY(1.5deg) translateX(100%); } }
+@keyframes marquee { to { transform: translateX(100%); } }
 
 /* ─── SECTION HEADING ─────────────────────────────────────── */
 .section-heading {
