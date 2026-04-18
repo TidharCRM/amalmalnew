@@ -748,7 +748,8 @@ h1, h2, h3, h4 { font-family: var(--headline); }
   color: var(--red);
 }
 .testi__nav {
-  display: flex; justify-content: center; gap: 0; margin-top: 40px;
+  display: flex; justify-content: center; gap: 16px; margin-top: 100px;
+  position: relative; z-index: 2;
 }
 .testi__btn {
   width: 52px; height: 52px;
