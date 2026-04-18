@@ -941,6 +941,23 @@ h1, h2, h3, h4 { font-family: var(--headline); }
   transition: color .15s, transform .15s;
 }
 .foot__admin:hover { color: rgba(255,255,255,.8); transform: rotate(30deg); }
+.foot__credit {
+  max-width: 1200px; margin: 40px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,.35);
+  letter-spacing: .04em;
+}
+.foot__klix {
+  color: rgba(255,255,255,.7);
+  font-weight: 700;
+  letter-spacing: .12em;
+  margin-inline-start: 6px;
+  transition: color .15s;
+}
+.foot__klix:hover { color: #25D366; }
 
 /* ─── ADMIN MODAL ─────────────────────────────────────────── */
 .admin-modal {
