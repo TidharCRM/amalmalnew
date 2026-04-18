@@ -192,6 +192,57 @@
     });
   });
 
+  // Next-cycle countdown state (shared with admin)
+  var CYCLE_KEY = 'cutit:nextCycle';
+  var CYCLE_DEFAULT = new Date('2026-06-01T10:00:00').getTime();
+  function getCycleTarget(){
+    var saved = localStorage.getItem(CYCLE_KEY);
+    var n = saved ? parseInt(saved, 10) : NaN;
+    return isNaN(n) ? CYCLE_DEFAULT : n;
+  }
+
+  // Bigcard countdown
+  (function(){
+    var dEl = document.getElementById('bc-days');
+    var hEl = document.getElementById('bc-hours');
+    var mEl = document.getElementById('bc-minutes');
+    var sEl = document.getElementById('bc-seconds');
+    if (!dEl || !hEl || !mEl || !sEl) return;
+    function pad(n){ return String(n).padStart(2, '0'); }
+    window.__cutitTickCountdown = function(){
+      var diff = Math.max(0, getCycleTarget() - Date.now());
+      dEl.textContent = pad(Math.floor(diff / 86400000));
+      hEl.textContent = pad(Math.floor((diff / 3600000) % 24));
+      mEl.textContent = pad(Math.floor((diff / 60000) % 60));
+      sEl.textContent = pad(Math.floor((diff / 1000) % 60));
+    };
+    window.__cutitTickCountdown();
+    setInterval(window.__cutitTickCountdown, 1000);
+  })();
+
+  // Admin settings — set the next-cycle date
+  (function(){
+    var ADMIN_PASSWORD = '9876';
+    var adminBtn = document.getElementById('admin-btn');
+    if (!adminBtn) return;
+    adminBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      var pw = prompt('סיסמת ניהול:');
+      if (pw === null) return;
+      if (pw !== ADMIN_PASSWORD) { alert('סיסמה שגויה'); return; }
+      var current = new Date(getCycleTarget());
+      function pad2(n){ return String(n).padStart(2,'0'); }
+      var formatted = current.getFullYear() + '-' + pad2(current.getMonth()+1) + '-' + pad2(current.getDate()) + 'T' + pad2(current.getHours()) + ':' + pad2(current.getMinutes());
+      var input = prompt('תאריך המחזור הבא (YYYY-MM-DDTHH:MM):', formatted);
+      if (input === null) return;
+      var d = new Date(input);
+      if (isNaN(d.getTime())) { alert('תאריך לא תקין'); return; }
+      localStorage.setItem(CYCLE_KEY, String(d.getTime()));
+      if (window.__cutitTickCountdown) window.__cutitTickCountdown();
+      alert('התאריך עודכן');
+    });
+  })();
+
   // Testimonials deck — stacked card carousel
   var deck = document.getElementById('testi-deck');
   if (deck) {
