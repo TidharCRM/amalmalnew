@@ -199,19 +199,18 @@
     var marker = document.getElementById('path-marker');
     var progressPath = document.getElementById('snake-progress');
     var info   = document.getElementById('path-info');
-    var tagEl  = document.getElementById('path-tag');
     var numEl  = document.getElementById('path-num');
     var titleEl = document.getElementById('path-title');
     var textEl  = document.getElementById('path-text');
     var nodeEls = document.querySelectorAll('.path__node');
 
-    if (!pin || !stage || !marker || !info || !tagEl || !numEl || !titleEl || !textEl) return;
+    if (!pin || !stage || !marker || !info || !numEl || !titleEl || !textEl) return;
 
     var lessons = [
-      { tag: 'שיעור 1', title: 'היכרות + סטוריטלינג',           text: 'פיתוח 3 רעיונות מהתוכן שלך + יסודות העריכה' },
-      { tag: 'שיעור 2', title: 'עריכה למתחילים עד מתקדמים',      text: 'Keyframes, קצב ותנועה' },
-      { tag: 'שיעור 3', title: 'עריכה מתקדמת',                   text: 'מסכות ואפקטים ויזואליים' },
-      { tag: 'שיעור 4', title: 'AI בעריכה',                      text: 'יצירת אפקטים עם בינה מלאכותית' }
+      { title: 'היכרות + סטוריטלינג',           text: 'פיתוח 3 רעיונות מהתוכן שלך + יסודות העריכה' },
+      { title: 'עריכה למתחילים עד מתקדמים',      text: 'Keyframes, קצב ותנועה' },
+      { title: 'עריכה מתקדמת',                   text: 'מסכות ואפקטים ויזואליים' },
+      { title: 'AI בעריכה',                      text: 'יצירת אפקטים עם בינה מלאכותית' }
     ];
 
     // Waypoints in % coordinates matching the SVG path M 12,20 H 88 V 52 H 12 V 82 H 88
@@ -291,7 +290,6 @@
       info.classList.add('fading');
       if (textTimer) clearTimeout(textTimer);
       textTimer = setTimeout(function () {
-        tagEl.textContent   = l.tag;
         numEl.textContent   = String(lessonIndex + 1).padStart(2, '0');
         titleEl.textContent = l.title;
         textEl.textContent  = l.text;

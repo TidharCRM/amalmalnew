@@ -455,55 +455,42 @@ h1, h2, h3, h4 { font-family: var(--headline); }
   will-change: left, top;
 }
 
-/* Center content */
+/* Lesson info panel (above the path, not overlapping) */
 .path__info {
-  position: absolute;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  width: clamp(260px, 34vw, 460px);
-  z-index: 5;
-  pointer-events: none;
-  background: rgba(0,0,0,.38);
-  border: 2px solid rgba(255,255,255,.18);
-  backdrop-filter: blur(6px);
-  border-radius: 18px;
-  padding: clamp(14px, 2.2vw, 28px);
-}
-.path__info-tag {
-  display: inline-block;
-  font-size: 11px; font-weight: 800; letter-spacing: .18em;
-  text-transform: uppercase;
-  background: var(--red); color: var(--white);
-  padding: 5px 14px;
-  border-radius: 4px;
-  margin-bottom: 18px;
-  transition: opacity .22s ease;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 28px);
+  padding: clamp(12px, 1.6vh, 20px) clamp(24px, 5vw, 56px) clamp(16px, 2.2vh, 28px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.02);
 }
 .path__info-num {
-  margin: 2px 0 10px;
-  font-size: clamp(26px, 3vw, 40px);
-  color: var(--blue);
+  flex-shrink: 0;
   font-family: var(--headline);
+  font-size: clamp(32px, 4vw, 56px);
   line-height: 1;
+  color: var(--red);
+  font-weight: 400;
+  transition: opacity .22s ease;
 }
+.path__info-body { min-width: 0; }
 .path__info-title {
   font-family: var(--headline);
-  font-size: clamp(24px, 2.8vw, 44px);
-  font-weight: 400; line-height: 1.1;
-  color: var(--white); margin: 0 0 12px;
+  font-size: clamp(18px, 2vw, 28px);
+  font-weight: 500; line-height: 1.15;
+  color: var(--white); margin: 0 0 4px;
   transition: opacity .22s ease;
 }
 .path__info-text {
-  font-size: clamp(13px, 1.1vw, 16px);
+  font-size: clamp(12px, 1.05vw, 15px);
   color: rgba(255,255,255,.55);
-  line-height: 1.65; margin: 0;
+  line-height: 1.55; margin: 0;
   transition: opacity .22s ease;
 }
-.path__info.fading .path__info-tag,
 .path__info.fading .path__info-title,
 .path__info.fading .path__info-num,
-.path__info.fading .path__info-text { opacity: 0; transform: translateY(6px); }
+.path__info.fading .path__info-text { opacity: 0; }
 
 /* ─── ABOUT ───────────────────────────────────────────────── */
 .about {
