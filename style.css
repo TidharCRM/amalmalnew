@@ -207,7 +207,15 @@ h1, h2, h3, h4 { font-family: var(--headline); }
 }
 
 /* ─── COURSE INTRO ────────────────────────────────────────── */
+.cards-pin {
+  position: relative;
+  background: var(--cream);
+  height: 280vh;
+  z-index: 1;
+}
 .cards-section {
+  position: sticky;
+  top: 0;
   padding: 100px 0 0;
 }
 .cards-section .section-heading {
