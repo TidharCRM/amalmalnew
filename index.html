@@ -32,19 +32,17 @@
     </div>
   </nav>
 
-  <!-- HERO — flat red -->
-  <section id="hero" class="hero">
-    <div class="hero__brand">Cut It<span class="hero__tm">&trade;</span></div>
-    <div class="hero__tag"><em>by Amalmal</em></div>
-    <div class="hero__center">
-      <h1 class="hero__title">
-        <span>את לא צריכה אישור</span>
-        <span>מאף אחד</span>
-      </h1>
-      <p class="hero__sub">כדי להתחיל לספר את הסיפור שלך</p>
-      <a href="#course" class="hero__scroll" aria-label="גללי למטה">↓</a>
-    </div>
-  </section>
+  <!-- HERO — frame scrubber -->
+  <div class="hero-pin" id="hero-pin">
+    <section id="hero" class="hero">
+      <canvas class="hero__canvas" id="hero-canvas"></canvas>
+      <div class="hero__logo-overlay" id="hero-logo-overlay">
+        <img src="logo-cutit.png" alt="Cut It by Amalmal" class="hero__logo" />
+        <a href="#course" class="hero__cta">גלי עוד</a>
+      </div>
+      <div class="hero__hint" id="hero-hint">גללי למטה</div>
+    </section>
+  </div>
 
   <!-- MARQUEE -->
   <div class="marquee" aria-hidden="true">
