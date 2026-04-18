@@ -209,50 +209,57 @@ h1, h2, h3, h4 { font-family: var(--headline); }
 
 /* ─── COURSE INTRO ────────────────────────────────────────── */
 .cards-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 120px 40px 100px;
-  position: relative; z-index: 1;
+  padding: 100px 0 0;
+}
+.cards-section .section-heading {
+  max-width: 1200px; margin: 0 auto 64px; padding: 0 40px;
 }
 
 .cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 0;
-  border: var(--border);
 }
 .bigcard {
   position: relative;
-  border-right: var(--border);
-  padding: 52px 40px;
-  min-height: 380px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 72px clamp(40px, 6vw, 100px);
+  min-height: 300px;
   overflow: hidden;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  transition: transform .2s;
+  border-bottom: var(--border);
+  transition: padding .2s;
 }
-.bigcard:last-child { border-right: none; }
-.bigcard:hover { z-index: 3; }
+.bigcard:last-child { border-bottom: none; }
 
-/* Skewed accent corner */
-.bigcard::before {
+/* Skewed stripe accent */
+.bigcard::after {
   content: "";
-  position: absolute; top: -40px; right: -40px;
-  width: 160px; height: 160px;
-  opacity: .15;
-  transform: skewX(-15deg) skewY(-10deg);
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 60px;
+  inset-inline-end: 38%;
+  opacity: .08;
   background: var(--black);
+  transform: skewX(-8deg);
+  pointer-events: none;
 }
 
 .bigcard--pink { background: var(--pink); color: var(--black); }
 .bigcard--blue { background: var(--blue); color: var(--black); }
 .bigcard--red  { background: var(--red);  color: var(--white); }
 
-.bigcard__body { flex: 1; max-width: 100%; }
+.bigcard__body {
+  flex: 1;
+  max-width: 58%;
+}
 .bigcard__title {
   font-family: var(--headline);
   font-weight: 400;
-  font-size: clamp(28px, 2.8vw, 42px);
-  line-height: 1.05; letter-spacing: -.01em;
+  font-size: clamp(36px, 4vw, 64px);
+  line-height: 1; letter-spacing: -.01em;
   margin: 0 0 24px;
 }
 .bigcard--pink .bigcard__title,
@@ -260,13 +267,15 @@ h1, h2, h3, h4 { font-family: var(--headline); }
 .bigcard--red .bigcard__title  { color: var(--white); }
 
 .bigcard__desc {
-  font-size: clamp(15px, 1.2vw, 17px);
+  font-size: clamp(15px, 1.3vw, 19px);
   line-height: 1.8; margin: 0; opacity: .85;
+  max-width: 520px;
 }
 .bigcard__list {
   list-style: none; padding: 0; margin: 0;
   display: flex; flex-direction: column; gap: 14px;
-  font-size: clamp(14px, 1.2vw, 16px); font-weight: 500;
+  font-size: clamp(15px, 1.3vw, 18px); font-weight: 500;
+  max-width: 480px;
 }
 .bigcard__list li {
   position: relative;
@@ -282,7 +291,21 @@ h1, h2, h3, h4 { font-family: var(--headline); }
   color: var(--pink); font-weight: 900;
 }
 .bigcard__list--bullets li::before { content: "→" !important; }
-.bigcard__art { display: none; }
+
+/* Art panel */
+.bigcard__art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: clamp(140px, 20vw, 260px);
+  height: clamp(140px, 20vw, 260px);
+  transform: skewY(-4deg);
+}
+.bigcard__art svg {
+  width: 100%; height: 100%;
+  filter: drop-shadow(4px 4px 0 rgba(0,0,0,.25));
+}
 
 /* ─── COURSE PATH ─────────────────────────────────────────── */
 .path {
@@ -628,10 +651,10 @@ h1, h2, h3, h4 { font-family: var(--headline); }
   .nav__links { gap: 20px; }
   .nav__links a { font-size: 11px; }
   .section-heading { padding: 0 24px; }
-  .cards-section { padding: 80px 24px 60px; }
-  .cards { grid-template-columns: 1fr; }
-  .bigcard { padding: 40px 28px; min-height: auto; border-right: none; border-bottom: var(--border); }
-  .bigcard:last-child { border-bottom: none; }
+  .cards-section { padding: 72px 0 0; }
+  .bigcard { padding: 48px 24px; flex-direction: column; align-items: flex-start; }
+  .bigcard__body { max-width: 100%; }
+  .bigcard__art { width: 120px; height: 120px; margin-top: 32px; }
   .path { padding: 80px 24px; clip-path: none; margin: 0; }
   .path__grid { grid-template-columns: repeat(2, 1fr); }
   .about { padding: 80px 24px; clip-path: none; margin: 0; }
