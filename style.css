@@ -689,26 +689,43 @@ h1, h2, h3, h4 { font-family: var(--headline); }
 
 /* ─── TESTIMONIALS ────────────────────────────────────────── */
 .testi {
-  background: #B8DCE8;
+  background: #EEF1F5;
   padding: 100px 40px;
   position: relative; z-index: 1;
+  overflow: hidden;
 }
 .testi .section-heading__title { color: var(--black); }
 .testi__deck {
   position: relative;
   max-width: 640px; margin: 0 auto;
-  min-height: 440px;
+  min-height: 480px;
+  perspective: 1400px;
 }
 .tcard {
   position: absolute; inset: 0;
   background: var(--cream); color: var(--black);
-  border-radius: 12px;
-  box-shadow: 0 14px 40px rgba(17,17,17,.15);
-  padding: 40px clamp(28px, 5vw, 48px);
+  border-radius: 18px;
+  box-shadow: 0 16px 44px rgba(17,17,17,.14), 0 2px 6px rgba(17,17,17,.06);
+  padding: 44px clamp(28px, 5vw, 52px);
   display: flex; flex-direction: column; justify-content: space-between;
   gap: 20px;
-  transition: transform .55s cubic-bezier(.22,.9,.3,1), opacity .45s ease;
+  transform-origin: 50% 100%;
+  transition:
+    transform .7s cubic-bezier(.22,.9,.3,1),
+    opacity .5s ease,
+    background-color .5s ease,
+    box-shadow .5s ease;
+  will-change: transform, opacity;
 }
+/* Pastel palette — cycles through cards via data-i */
+.tcard[data-i="0"] { background: #FFF4E0; } /* soft butter */
+.tcard[data-i="1"] { background: #FFE4E6; } /* soft rose */
+.tcard[data-i="2"] { background: #E0F0E7; } /* soft mint */
+.tcard[data-i="3"] { background: #E6E9FA; } /* soft lavender */
+.tcard[data-i="4"] { background: #FFE8D4; } /* soft peach */
+.tcard[data-i="5"] { background: #DCEDF7; } /* soft sky */
+.tcard[data-i="6"] { background: #F4E6F0; } /* soft lilac */
+.tcard[data-i="7"] { background: #E8F3D8; } /* soft pistachio */
 
 .tcard__stars {
   font-size: 16px;

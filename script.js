@@ -377,26 +377,46 @@
     });
   })();
 
-  // Testimonials deck — stacked card carousel
+  // Testimonials deck — stacked card carousel with tilt + slide animation
   var deck = document.getElementById('testi-deck');
   if (deck) {
     var cards = Array.from(deck.querySelectorAll('.tcard'));
     var current = 0;
+    var direction = 1; // 1 = next, -1 = prev
+    // Subtle rotation variation per card so the stack feels hand-placed
+    var rots = [-2.5, 1.8, -1.2, 2.2, -2, 1.5, -1.8, 2];
 
     function layout() {
       cards.forEach(function (card, i) {
         var offset = (i - current + cards.length) % cards.length;
-        var scale = 1 - offset * 0.04;
-        var y = offset * 14;
         var z = cards.length - offset;
-        card.style.transform = 'translateY(' + y + 'px) scale(' + scale + ')';
         card.style.zIndex = z;
-        card.style.opacity = offset > 3 ? 0 : 1;
+
+        if (offset === 0) {
+          // Active card — front and centered with a tiny tilt
+          card.style.transform = 'translate(0, 0) rotate(' + (rots[i] * 0.2) + 'deg) scale(1)';
+          card.style.opacity = 1;
+          card.style.pointerEvents = 'auto';
+        } else if (offset <= 3) {
+          // Stacked behind — scaled down, pushed back, slight tilt
+          var scale = 1 - offset * 0.05;
+          var y = offset * 18;
+          var rot = rots[i] || 0;
+          card.style.transform = 'translate(0, ' + y + 'px) rotate(' + rot + 'deg) scale(' + scale + ')';
+          card.style.opacity = 1 - offset * 0.15;
+          card.style.pointerEvents = 'none';
+        } else {
+          // Far cards — off-screen on the exit side
+          var exitX = direction > 0 ? -140 : 140;
+          card.style.transform = 'translate(' + exitX + '%, 40px) rotate(' + (direction * -12) + 'deg) scale(.85)';
+          card.style.opacity = 0;
+          card.style.pointerEvents = 'none';
+        }
       });
     }
 
-    function next() { current = (current + 1) % cards.length; layout(); }
-    function prev() { current = (current - 1 + cards.length) % cards.length; layout(); }
+    function next() { direction = 1;  current = (current + 1) % cards.length; layout(); }
+    function prev() { direction = -1; current = (current - 1 + cards.length) % cards.length; layout(); }
 
     var auto = null;
     function startAuto() { stopAuto(); auto = setInterval(next, 6000); }
