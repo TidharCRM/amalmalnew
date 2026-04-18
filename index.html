@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cut It by Amalmal</title>
   <meta name="description" content="Cut It by Amalmal — קורס פרקטי ליצירת סרטונים שעוצרים גלילה, מהטלפון בלבד." />
-  <link rel="stylesheet" href="style.css?v=48" />
+  <link rel="stylesheet" href="style.css?v=55" />
 </head>
 
 <body>
@@ -38,7 +38,15 @@
         <img src="logo-cutit.png" alt="Cut It by Amalmal" class="hero__logo" />
         <a href="#course" class="hero__cta">גלי עוד</a>
       </div>
-      <div class="hero__hint" id="hero-hint">גללי למטה</div>
+      <div class="hero__hint" id="hero-hint" aria-hidden="true">
+        <svg class="hero__hint-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" direction="ltr">
+          <path id="hero-hint-circle" fill="none" d="M 60,60 m -44,0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" />
+          <text class="hero__hint-text" dy="4">
+            <textPath xlink:href="#hero-hint-circle" startOffset="0">SCROLL DOWN · SCROLL DOWN · SCROLL DOWN · </textPath>
+          </text>
+        </svg>
+        <span class="hero__hint-arrow">↓</span>
+      </div>
     </section>
   </div>
 
