@@ -23,46 +23,13 @@
     function fitDraw(img) {
       var cw = canvas.width, ch = canvas.height;
       var iw = img.naturalWidth, ih = img.naturalHeight;
-      // Middle-ground scale: between contain and cover.
-      var containScale = Math.min(cw / iw, ch / ih);
-      var coverScale = Math.max(cw / iw, ch / ih);
-      var scale = containScale + (coverScale - containScale) * 0.38;
+      // Cover: fill canvas fully, crop overflow — no black letterbox.
+      var scale = Math.max(cw / iw, ch / ih);
       var dw = iw * scale, dh = ih * scale;
       var dx = (cw - dw) / 2;
       var dy = (ch - dh) / 2;
       ctx.clearRect(0, 0, cw, ch);
       ctx.drawImage(img, dx, dy, dw, dh);
-
-      // Feather the frame edges so borders fade softly.
-      var feather = Math.max(20, Math.min(64, Math.round(Math.min(dw, dh) * 0.06)));
-      ctx.save();
-      ctx.globalCompositeOperation = 'destination-out';
-
-      var gLeft = ctx.createLinearGradient(dx, 0, dx + feather, 0);
-      gLeft.addColorStop(0, 'rgba(0,0,0,1)');
-      gLeft.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = gLeft;
-      ctx.fillRect(dx, dy, feather, dh);
-
-      var gRight = ctx.createLinearGradient(dx + dw - feather, 0, dx + dw, 0);
-      gRight.addColorStop(0, 'rgba(0,0,0,0)');
-      gRight.addColorStop(1, 'rgba(0,0,0,1)');
-      ctx.fillStyle = gRight;
-      ctx.fillRect(dx + dw - feather, dy, feather, dh);
-
-      var gTop = ctx.createLinearGradient(0, dy, 0, dy + feather);
-      gTop.addColorStop(0, 'rgba(0,0,0,1)');
-      gTop.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = gTop;
-      ctx.fillRect(dx, dy, dw, feather);
-
-      var gBottom = ctx.createLinearGradient(0, dy + dh - feather, 0, dy + dh);
-      gBottom.addColorStop(0, 'rgba(0,0,0,0)');
-      gBottom.addColorStop(1, 'rgba(0,0,0,1)');
-      ctx.fillStyle = gBottom;
-      ctx.fillRect(dx, dy + dh - feather, dw, feather);
-
-      ctx.restore();
     }
 
     function drawFrame(index) {
