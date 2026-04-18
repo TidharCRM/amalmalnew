@@ -23,10 +23,21 @@
     function fitDraw(img) {
       var cw = canvas.width, ch = canvas.height;
       var iw = img.naturalWidth, ih = img.naturalHeight;
-      // contain: show full frame with minimal/no cropping
-      var scale = Math.min(cw / iw, ch / ih);
+      // Middle-ground scale: between contain and cover.
+      var containScale = Math.min(cw / iw, ch / ih);
+      var coverScale = Math.max(cw / iw, ch / ih);
+      var scale = containScale + (coverScale - containScale) * 0.38;
       var dw = iw * scale, dh = ih * scale;
+
+      // Soft, blurry backdrop to avoid harsh borders around the main frame.
+      var bgScale = coverScale;
+      var bgw = iw * bgScale, bgh = ih * bgScale;
       ctx.clearRect(0, 0, cw, ch);
+      ctx.save();
+      ctx.filter = 'blur(18px) brightness(0.92)';
+      ctx.drawImage(img, (cw - bgw) / 2, (ch - bgh) / 2, bgw, bgh);
+      ctx.restore();
+
       ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
     }
 
