@@ -428,7 +428,52 @@
     layout();
     startAuto();
     deck.addEventListener('mouseenter', stopAuto);
-    deck.addEventListener('touchstart', stopAuto, { passive: true });
+
+    // Swipe support — any direction advances to next; opposite goes back
+    var touchStartX = 0, touchStartY = 0, touchActive = false;
+    deck.addEventListener('touchstart', function (e) {
+      stopAuto();
+      touchActive = true;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    deck.addEventListener('touchend', function (e) {
+      if (!touchActive) return;
+      touchActive = false;
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      var dy = e.changedTouches[0].clientY - touchStartY;
+      var absX = Math.abs(dx), absY = Math.abs(dy);
+      if (Math.max(absX, absY) < 30) return; // ignore taps/tiny moves
+      // Horizontal swipe → direction; vertical swipe also navigates (up = next, down = prev)
+      if (absX > absY) {
+        // RTL: swipe left (dx<0) = next; swipe right = prev
+        if (dx < 0) next(); else prev();
+      } else {
+        if (dy < 0) next(); else prev();
+      }
+    }, { passive: true });
+
+    // Mouse drag support for desktop
+    var mouseDown = false, mouseStartX = 0, mouseStartY = 0;
+    deck.addEventListener('mousedown', function (e) {
+      stopAuto();
+      mouseDown = true;
+      mouseStartX = e.clientX;
+      mouseStartY = e.clientY;
+    });
+    window.addEventListener('mouseup', function (e) {
+      if (!mouseDown) return;
+      mouseDown = false;
+      var dx = e.clientX - mouseStartX;
+      var dy = e.clientY - mouseStartY;
+      var absX = Math.abs(dx), absY = Math.abs(dy);
+      if (Math.max(absX, absY) < 30) return;
+      if (absX > absY) {
+        if (dx < 0) next(); else prev();
+      } else {
+        if (dy < 0) next(); else prev();
+      }
+    });
   }
 
   // Lead form — handles submission via Formspree
