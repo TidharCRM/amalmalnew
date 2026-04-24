@@ -699,4 +699,160 @@
     update();
   })();
 
+  /* ---------------------------------------------------------------
+     SCRAMBLE / DECRYPT TEXT REVEAL
+     ---------------------------------------------------------------
+     Usage (HTML):
+       <span data-scramble>Hello</span>
+
+     Optional attributes (all optional):
+       data-scramble-duration="1000"   // total animation ms (default 1000)
+       data-scramble-char-delay="30"   // stagger between chars ms  (default 30)
+       data-scramble-chars="!@#$..."   // custom character pool
+       data-scramble-trigger="view"    // "view" | "immediate" | "none"
+       data-scramble-hover="true"      // replay on mouseenter
+       data-scramble-loop="true"       // auto replay forever (every ~1.8s)
+
+     Works in RTL (Hebrew): the string is iterated in logical order,
+     so the reveal flows naturally from the start of the word to its end.
+  --------------------------------------------------------------- */
+  (function(){
+    var DEFAULT_CHARS = '!<>-_\\/[]{}=+*^?#@$%&ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789אבגדהוזחטיכלמנסעפצקרשת';
+
+    function Scramble(el, opts){
+      opts = opts || {};
+      this.el        = el;
+      this.finalText = (opts.text != null ? opts.text : el.textContent) || '';
+      this.duration  = opts.duration  != null ? opts.duration  : 1000;
+      this.charDelay = opts.charDelay != null ? opts.charDelay : 30;
+      this.chars     = opts.chars || DEFAULT_CHARS;
+      this.loop      = !!opts.loop;
+      this.running   = false;
+      this._loopTimer = null;
+      el.classList.add('scramble');
+    }
+    Scramble.prototype.play = function(){
+      if (this.running) return;
+      this.running = true;
+
+      var self = this;
+      var text = this.finalText;
+      var len  = text.length;
+      var chars = this.chars;
+      var duration = this.duration;
+      var charDelay = this.charDelay;
+
+      // Per-character "lock time" — base stagger + small random jitter.
+      var lockTimes = new Array(len);
+      var maxLock = 0;
+      for (var i = 0; i < len; i++){
+        var base = i * charDelay;
+        var jitter = Math.random() * (duration * 0.18);
+        lockTimes[i] = base + jitter;
+        if (lockTimes[i] > maxLock) maxLock = lockTimes[i];
+      }
+      // Normalize so the last char always locks near `duration` (ease-out feel).
+      var scale = (duration - 40) / Math.max(maxLock, 1);
+      for (var j = 0; j < len; j++) lockTimes[j] *= scale;
+
+      var start = performance.now();
+      self.el.classList.remove('is-revealed');
+      self.el.classList.add('is-scrambling');
+
+      function frame(now){
+        var t = now - start;
+        var out = '';
+        var allLocked = true;
+        for (var k = 0; k < len; k++){
+          var fc = text.charAt(k);
+          // Preserve whitespace and line breaks as-is.
+          if (fc === ' ' || fc === '\u00A0' || fc === '\n' || fc === '\t') {
+            out += fc;
+            continue;
+          }
+          if (t >= lockTimes[k]) {
+            out += fc;
+          } else {
+            allLocked = false;
+            out += chars.charAt(Math.floor(Math.random() * chars.length));
+          }
+        }
+        self.el.textContent = out;
+
+        if (!allLocked) {
+          requestAnimationFrame(frame);
+        } else {
+          self.el.textContent = text;
+          self.el.classList.remove('is-scrambling');
+          self.el.classList.add('is-revealed');
+          setTimeout(function(){ self.el.classList.remove('is-revealed'); }, 650);
+          self.running = false;
+          if (self.loop) {
+            self._loopTimer = setTimeout(function(){ self.play(); }, 1800);
+          }
+        }
+      }
+      requestAnimationFrame(frame);
+    };
+
+    function boot(){
+      var nodes = document.querySelectorAll('[data-scramble]');
+      if (!nodes.length) return;
+
+      var items = [];
+      nodes.forEach(function(el){
+        var duration  = parseInt(el.getAttribute('data-scramble-duration'), 10);
+        var charDelay = parseInt(el.getAttribute('data-scramble-char-delay'), 10);
+        var trigger   = el.getAttribute('data-scramble-trigger') || 'view';
+        var loop      = el.getAttribute('data-scramble-loop') === 'true';
+        var hover     = el.getAttribute('data-scramble-hover') === 'true';
+        var chars     = el.getAttribute('data-scramble-chars') || undefined;
+
+        var inst = new Scramble(el, {
+          text: (el.textContent || '').trim(),
+          duration:  isNaN(duration)  ? undefined : duration,
+          charDelay: isNaN(charDelay) ? undefined : charDelay,
+          chars: chars,
+          loop: loop
+        });
+        items.push({ el: el, inst: inst, trigger: trigger });
+
+        if (hover) {
+          el.addEventListener('mouseenter', function(){ inst.play(); });
+        }
+        if (trigger === 'immediate') inst.play();
+      });
+
+      // Trigger on viewport enter — one-shot per element.
+      if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if (!entry.isIntersecting) return;
+            for (var i = 0; i < items.length; i++) {
+              if (items[i].el !== entry.target) continue;
+              var it = items[i];
+              if (it.trigger !== 'view') { obs.unobserve(entry.target); return; }
+              // Gentle stagger for sibling scrambles in the same section.
+              setTimeout(function(s){ return function(){ s.inst.play(); }; }(it), i * 130);
+              obs.unobserve(entry.target);
+              return;
+            }
+          });
+        }, { threshold: 0.35, rootMargin: '0px 0px -10% 0px' });
+
+        items.forEach(function(it){
+          if (it.trigger === 'view') obs.observe(it.el);
+        });
+      } else {
+        items.forEach(function(it){ if (it.trigger === 'view') it.inst.play(); });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
+    }
+  })();
+
 })();

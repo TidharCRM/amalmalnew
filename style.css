@@ -114,6 +114,28 @@ html { scroll-behavior: smooth; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 
+/* Scramble / decrypt text reveal */
+.scramble {
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "clig" 0;
+  -webkit-font-smoothing: antialiased;
+  transition: filter .35s ease-out, text-shadow .45s ease-out;
+}
+.scramble.is-scrambling {
+  filter: blur(.35px);
+  animation: scramble-flicker 140ms steps(2, end) infinite;
+}
+.scramble.is-revealed {
+  text-shadow: 0 0 14px rgba(240, 50, 40, .18);
+}
+@keyframes scramble-flicker {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .92; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scramble.is-scrambling { animation: none; filter: none; }
+}
+
 body {
   font-family: var(--sans);
   background: var(--cream);
