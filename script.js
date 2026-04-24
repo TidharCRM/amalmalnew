@@ -709,7 +709,7 @@
        data-scramble-duration="1400"   // total animation ms (default 1400)
        data-scramble-char-delay="48"   // stagger between chars ms  (default 48)
        data-scramble-tick="52"         // ms between glyph changes (default 52, higher = calmer)
-       data-scramble-chars="!@#$..."   // custom character pool
+       data-scramble-chars="abc0123456789!@$%"   // override pool (default matches this)
        data-scramble-trigger="view"    // "view" | "immediate" | "none"
        data-scramble-hover="true"      // replay on mouseenter
        data-scramble-loop="true"       // auto replay forever (every ~1.8s)
@@ -718,7 +718,8 @@
      so the reveal flows naturally from the start of the word to its end.
   --------------------------------------------------------------- */
   (function(){
-    var DEFAULT_CHARS = '!<>-_\\/[]{}=+*^?#@$%&ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789אבגדהוזחטיכלמנסעפצקרשת';
+    // Decoy glyphs only — Latin a/b/c, digits, and !@$% (exactly one char per slot; same length as final string).
+    var DEFAULT_CHARS = 'abc0123456789!@$%';
 
     function Scramble(el, opts){
       opts = opts || {};
@@ -798,6 +799,7 @@
             out += glyphBuf[k];
           }
         }
+        // Always exactly `len` UTF-16 code units — never longer/shorter than the real phrase.
         self.el.textContent = out;
 
         if (!allLocked) {
