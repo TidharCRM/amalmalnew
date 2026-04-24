@@ -169,16 +169,19 @@ html { scroll-behavior: smooth; }
 .about__title .scramble--face {
   white-space: normal;
 }
-/* Short pill label — keep on one line */
-.about .scramble-wrap:has(.about__tag) {
+/* Pill label: outer .about__tag holds padding/bg; inner scramble keeps one line */
+.about__tag .scramble-wrap {
   display: inline-block;
   width: auto;
   max-width: 100%;
-  vertical-align: middle;
+  vertical-align: baseline;
 }
-.about .scramble-wrap:has(.about__tag) .scramble__size,
-.about .scramble-wrap:has(.about__tag) .scramble--face {
+.about__tag .scramble__size,
+.about__tag .scramble--face {
   white-space: nowrap;
+}
+.about__tag .scramble--face {
+  display: block;
 }
 .about__title em.scramble {
   font-style: italic;
