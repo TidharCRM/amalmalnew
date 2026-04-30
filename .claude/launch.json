@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "cutit-static",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8765"],
+      "port": 8765
+    },
+    {
+      "name": "al-hagal-static",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd ..\\al-hagal && python -m http.server 8766"],
+      "port": 8766
+    },
+    {
+      "name": "klix-static",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd ..\\KLIX && python -m http.server 8767"],
+      "port": 8767
+    },
+    {
+      "name": "klix-handoff",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd klix-handoff\\untitled\\project && python -m http.server 8768"],
+      "port": 8768
+    }
+  ]
+}
