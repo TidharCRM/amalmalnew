@@ -2,11 +2,13 @@
   'use strict';
 
   // Hero — frame scrubber
-  var FRAME_COUNT = 81;
-  var LOGO_START  = 0.82; // logo fades in at this scroll fraction
+  var FRAME_COUNT  = 81;
+  var INTRO_END    = 0.45; // first sentence fully gone by here
+  var LOGO_START   = 0.55; // second sentence starts fading in here
 
   var heroPin     = document.getElementById('hero-pin');
   var canvas      = document.getElementById('hero-canvas');
+  var heroIntro   = document.getElementById('hero-intro');
   var logoOverlay = document.getElementById('hero-logo-overlay');
   var heroHint    = document.getElementById('hero-hint');
 
@@ -58,7 +60,14 @@
       var idx = Math.min(Math.round(p * (FRAME_COUNT - 1)), FRAME_COUNT - 1);
       drawFrame(idx);
 
-      // Logo fades in over last ~18% of scroll
+      // First sentence: fully visible at scroll start, fades out by INTRO_END
+      if (heroIntro) {
+        var introP = Math.max(0, Math.min(1, 1 - p / INTRO_END));
+        heroIntro.style.opacity = introP.toFixed(3);
+        heroIntro.style.transform = 'translateY(' + (p * -32).toFixed(1) + 'px)';
+      }
+
+      // Second sentence + tagline + CTA: fades in from LOGO_START to end
       var logoP = Math.max(0, (p - LOGO_START) / (1 - LOGO_START));
       logoOverlay.style.opacity = logoP.toFixed(3);
 
@@ -201,10 +210,26 @@
   function getCycleTarget(){ return cycleTarget; }
   function getSpotsLeft(){ return spotsLeft; }
 
+  var HEB_MONTHS = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+  function formatHebrewDate(ts){
+    var d = new Date(ts);
+    if (isNaN(d.getTime())) return '';
+    return d.getDate() + ' ב' + HEB_MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
   function updateSpotsDisplay(){
-    var el = document.getElementById('bc-spots');
-    if (!el) return;
-    el.textContent = (spotsLeft === null || spotsLeft === undefined) ? '—' : String(spotsLeft);
+    var text = (spotsLeft === null || spotsLeft === undefined) ? '—' : String(spotsLeft);
+    var bc = document.getElementById('bc-spots');
+    if (bc) bc.textContent = text;
+    var els = document.querySelectorAll('.js-cycle-spots');
+    for (var i = 0; i < els.length; i++) els[i].textContent = text;
+  }
+
+  function updateDateDisplay(){
+    var formatted = formatHebrewDate(getCycleTarget());
+    if (!formatted) return;
+    var els = document.querySelectorAll('.js-cycle-date');
+    for (var i = 0; i < els.length; i++) els[i].textContent = formatted;
   }
 
   function subscribeFirebase(){
@@ -217,6 +242,7 @@
         if (!isNaN(d.getTime())) {
           cycleTarget = d.getTime();
           if (window.__cutitTickCountdown) window.__cutitTickCountdown();
+          updateDateDisplay();
         }
       }
     });
@@ -231,6 +257,10 @@
       }
     });
   }
+  // Render defaults so [תאריך]/[X] never appear before Firebase responds
+  updateDateDisplay();
+  updateSpotsDisplay();
+
   if (window.__cutitFb) subscribeFirebase();
   else window.addEventListener('cutit-fb-ready', subscribeFirebase);
 
@@ -367,6 +397,7 @@
         spotsLeft = spotsVal;
         if (window.__cutitTickCountdown) window.__cutitTickCountdown();
         updateSpotsDisplay();
+        updateDateDisplay();
         saveStatus.textContent = 'נשמר בהצלחה';
         setTimeout(closeModal, 900);
       }).catch(function(err){
@@ -572,7 +603,7 @@
     function setupProgressStroke() {
       if (!progressPath || typeof progressPath.getTotalLength !== 'function') return;
       progressLen = progressPath.getTotalLength();
-      progressPath.style.stroke = '#F03228';
+      progressPath.style.stroke = '#B7321F';
       progressPath.style.strokeDasharray = progressLen;
       progressPath.style.strokeDashoffset = progressLen;
       progressPath.style.transition = 'stroke-dashoffset .12s linear';

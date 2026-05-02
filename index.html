@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cut It by Amalmal</title>
   <meta name="description" content="קורס עריכה ויצירת תוכן שמלמד אותך לערוך, ליצור ולהביא את הקול שלך החוצה. מהטלפון. עם AI. בלי ציוד יקר." />
-  <link rel="stylesheet" href="style.css?v=73" />
+  <link rel="stylesheet" href="style.css?v=76" />
 </head>
 
 <body>
@@ -34,8 +34,11 @@
   <div class="hero-pin" id="hero-pin">
     <section id="hero" class="hero">
       <canvas class="hero__canvas" id="hero-canvas"></canvas>
+      <div class="hero__intro" id="hero-intro">
+        <h1 class="hero__intro-text">הפיד שלך יכול <strong>להביא לקוחות.</strong></h1>
+      </div>
       <div class="hero__logo-overlay" id="hero-logo-overlay">
-        <h1 class="hero__hook">הפיד שלך יכול להביא לקוחות.<br /><em>עכשיו תלמדי איך.</em></h1>
+        <h1 class="hero__hook"><em>עכשיו תלמדי איך.</em></h1>
         <p class="hero__tagline">קורס עריכה ויצירת תוכן שמלמד אותך לערוך, ליצור ולהביא את הקול שלך החוצה.<br /><strong>מהטלפון. עם AI. בלי ציוד יקר.</strong></p>
         <a href="#contact" class="hero__cta">כן, אני רוצה להתחיל ← שמרי לי מקום</a>
       </div>
@@ -168,7 +171,7 @@
           <path id="snake-track" d="M 12,20 L 76,20 Q 88,20 88,32 L 88,40 Q 88,52 76,52 L 24,52 Q 12,52 12,64 L 12,70 Q 12,82 24,82 L 88,82"
                 fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           <path id="snake-progress" d="M 12,20 L 76,20 Q 88,20 88,32 L 88,40 Q 88,52 76,52 L 24,52 Q 12,52 12,64 L 12,70 Q 12,82 24,82 L 88,82"
-                fill="none" stroke="#F03228" stroke-width="1.8"
+                fill="none" stroke="#B7321F" stroke-width="1.8"
                 stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
 
@@ -190,7 +193,7 @@
           <span class="path__node-label path__node-label--out-right">פרונטלי · AI + יצירה</span>
         </div>
 
-        <img class="path__marker" id="path-marker" src="movingface.png" alt="" />
+        <img class="path__marker" id="path-marker" src="movingface2.png" alt="" />
       </div>
     </section>
   </div>
@@ -258,7 +261,7 @@
       <h2 class="urgency__title">כי עולם התוכן לא מחכה.<br /><em>האלגוריתם לא עוצר.</em></h2>
       <p class="urgency__p">היכולת ליצור סרטונים בולטים — היא כבר לא בונוס. היא חלק הכרחי מהנוכחות שלך ברשת.</p>
       <p class="urgency__p">כל שבוע שאת לא יוצרת — מישהי אחרת תופסת את המקום שהיה יכול להיות שלך בפיד. <strong>לא כי היא טובה יותר ממך. כי היא למדה קודם.</strong></p>
-      <p class="urgency__p urgency__p--strong">המחזור הקרוב נפתח ב-<span class="urgency__date">[תאריך]</span>.</p>
+      <p class="urgency__p urgency__p--strong">המחזור הקרוב נפתח ב-<span class="urgency__date js-cycle-date">[תאריך]</span>.</p>
       <a class="urgency__cta" href="#contact">תפסי את המקום שלך עכשיו ←</a>
     </div>
   </section>
@@ -296,7 +299,7 @@
     <div class="contact__box">
       <div class="contact__logo-dot"></div>
       <h2 class="contact__title">מוכנה <em>להתחיל?</em></h2>
-      <p class="contact__sub">המחזור הקרוב נפתח ב-<strong>[תאריך]</strong>. נותרו <strong>[X]</strong> מקומות בלבד.</p>
+      <p class="contact__sub">המחזור הקרוב נפתח ב-<strong class="js-cycle-date">[תאריך]</strong>. נותרו <strong class="js-cycle-spots">—</strong> מקומות בלבד.</p>
       <form class="leadf" id="lead-form" action="https://formspree.io/f/xjgjwynp" method="POST" novalidate>
         <label class="leadf__row"><span>שם מלא</span><input type="text" name="name" required autocomplete="name" placeholder="השם שלך" /></label>
         <label class="leadf__row"><span>טלפון</span><input type="tel" name="phone" required autocomplete="tel" placeholder="05X-XXXXXXX" /></label>
@@ -401,7 +404,7 @@
     };
     window.dispatchEvent(new CustomEvent('cutit-fb-ready'));
   </script>
-  <script src="script.js?v=35"></script>
+  <script src="script.js?v=37"></script>
 </body>
 
 </html>
