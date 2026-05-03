@@ -195,7 +195,7 @@
   });
 
   // Next-cycle state (synced via Firebase RTDB + Auth)
-  var CYCLE_DEFAULT = new Date('2026-06-01T10:00:00').getTime();
+  var CYCLE_DEFAULT = new Date('2026-05-13T10:00:00').getTime();
   var cycleTarget = CYCLE_DEFAULT;
   var spotsLeft = null;
 
