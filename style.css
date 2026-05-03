@@ -743,7 +743,7 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
 /* Moving marker */
 .path__marker {
   position: absolute;
-  width: 52px; height: 52px;
+  width: 64px; height: 64px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
