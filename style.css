@@ -353,7 +353,7 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
 
 /* ─── HERO ────────────────────────────────────────────────── */
 .hero-pin {
-  height: 250vh;
+  height: 350vh;
   position: relative;
   background: var(--black);
   z-index: 1;
@@ -387,13 +387,12 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
 .hero__logo-overlay {
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 28px; opacity: 0;
-  padding: calc(var(--nav-h) + 32px) 24px 80px;
-  will-change: opacity; pointer-events: none;
+  align-items: center; justify-content: flex-end;
+  gap: 22px; opacity: 1;
+  padding: calc(var(--nav-h) + 32px) 24px 12vh;
+  pointer-events: none;
 }
-.hero__logo-overlay[style*="opacity: 1"],
-.hero__logo-overlay[style*="opacity:1"] { pointer-events: auto; }
+.hero__logo-overlay .hero__cta { pointer-events: auto; }
 .hero__logo {
   max-width: min(640px, 80vw);
   width: 100%; display: block;
@@ -412,10 +411,17 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
   border-radius: 6px;
   box-shadow: 0 6px 24px rgba(183,50,31,.35);
   transition: transform .15s, box-shadow .15s;
+  white-space: nowrap;
 }
 .hero__cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 28px rgba(183,50,31,.45);
+}
+@media (max-width: 480px) {
+  .hero__cta { font-size: 13px; padding: 12px 22px; letter-spacing: .03em; }
+}
+@media (max-width: 380px) {
+  .hero__cta { font-size: 12px; padding: 11px 16px; letter-spacing: .02em; }
 }
 .hero__hint {
   position: absolute; bottom: 20px; left: 20px;
@@ -492,7 +498,6 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
   position: relative;
   background: var(--black);
   z-index: 1;
-  padding-bottom: 80px;
 }
 .cards-section {
   padding: 80px 0 0;
@@ -510,7 +515,7 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
   gap: 22px;
   max-width: 1180px;
   margin: 0 auto;
-  padding: 0 clamp(16px, 3vw, 32px);
+  padding: 0 clamp(16px, 3vw, 32px) 12vh;
 }
 .bigcard {
   position: sticky;
@@ -825,7 +830,7 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: clamp(-72px, -10vw, -108px);
+  margin-top: clamp(-200px, -20vw, -260px);
   margin-bottom: 8px;
   transform-origin: 50% 0;
   filter: drop-shadow(0 22px 36px rgba(17,17,17,.2));
@@ -880,9 +885,9 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
   border-radius: clamp(6px, 1.2vw, 12px);
 }
 @keyframes about-sway {
-  0%   { transform: rotate(-1.1deg); }
-  50%  { transform: rotate(1.1deg); }
-  100% { transform: rotate(-1.1deg); }
+  0%   { transform: rotate(-2.6deg); }
+  50%  { transform: rotate(2.6deg); }
+  100% { transform: rotate(-2.6deg); }
 }
 /* Stronger entrance than default .reveal — feels like it drops into place */
 .about__hang.reveal {
@@ -1324,7 +1329,7 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
   .about { padding: 56px 24px 72px; }
   .about__inner { grid-template-columns: 1fr; gap: 32px; }
   .about__hang {
-    margin-top: clamp(-48px, -12vw, -72px);
+    margin-top: clamp(-180px, -34vw, -240px);
     max-width: 320px;
     margin-inline: auto;
   }
@@ -1396,6 +1401,47 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
   text-decoration: underline;
   text-decoration-thickness: 3px;
   text-underline-offset: 6px;
+}
+.hero__hook-lead {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 12vh;
+  margin: 0;
+  font-family: var(--headline);
+  font-weight: 800;
+  font-size: clamp(26px, 4.6vw, 56px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  text-align: center;
+  text-shadow: 0 4px 32px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);
+  padding: 0 8px;
+  pointer-events: none;
+  /* default state — applies when reverting (rest is leaving, lead is coming back): wait, then fade in */
+  transition: opacity .55s ease .45s;
+  will-change: opacity;
+}
+.hero__logo-overlay .hero__hook,
+.hero__logo-overlay .hero__tagline,
+.hero__logo-overlay .hero__cta {
+  opacity: 0;
+  transform: translateY(10px);
+  /* default state — applies when reverting (rest leaves first, fast, no delay) */
+  transition: opacity .35s ease, transform .35s ease;
+}
+.hero__logo-overlay.is-final .hero__hook-lead {
+  opacity: 0;
+  /* is-final state — applies going forward: lead leaves fast, no delay */
+  transition: opacity .35s ease;
+}
+.hero__logo-overlay.is-final .hero__hook,
+.hero__logo-overlay.is-final .hero__tagline,
+.hero__logo-overlay.is-final .hero__cta {
+  opacity: 1;
+  transform: none;
+  /* is-final state — applies going forward: rest waits, then fades in */
+  transition: opacity .7s ease .55s, transform .7s ease .55s;
 }
 .hero__logo {
   max-width: min(420px, 60vw) !important;

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cut It by Amalmal</title>
   <meta name="description" content="קורס עריכה ויצירת תוכן שמלמד אותך לערוך, ליצור ולהביא את הקול שלך החוצה. מהטלפון. עם AI. בלי ציוד יקר." />
-  <link rel="stylesheet" href="style.css?v=76" />
+  <link rel="stylesheet" href="style.css?v=81" />
 </head>
 
 <body>
@@ -34,10 +34,8 @@
   <div class="hero-pin" id="hero-pin">
     <section id="hero" class="hero">
       <canvas class="hero__canvas" id="hero-canvas"></canvas>
-      <div class="hero__intro" id="hero-intro">
-        <h1 class="hero__intro-text">הפיד שלך יכול <strong>להביא לקוחות.</strong></h1>
-      </div>
       <div class="hero__logo-overlay" id="hero-logo-overlay">
+        <h1 class="hero__hook-lead">הפיד שלך יכול להביא לקוחות.</h1>
         <h1 class="hero__hook"><em>עכשיו תלמדי איך.</em></h1>
         <p class="hero__tagline">קורס עריכה ויצירת תוכן שמלמד אותך לערוך, ליצור ולהביא את הקול שלך החוצה.<br /><strong>מהטלפון. עם AI. בלי ציוד יקר.</strong></p>
         <a href="#contact" class="hero__cta">כן, אני רוצה להתחיל ← שמרי לי מקום</a>
@@ -75,11 +73,6 @@
   <!-- COURSE INTRO — big cards -->
   <div class="cards-pin" id="cards-pin">
   <section id="course" class="cards-section">
-    <div class="section-heading">
-      <h2 class="section-heading__title">זה בשבילך אם —</h2>
-      <p class="section-heading__sub">חמש סיבות שכנראה הביאו אותך לכאן.</p>
-    </div>
-
     <div class="cards">
       <!-- Card 1: Pink — audience -->
       <article class="bigcard bigcard--pink">
@@ -128,6 +121,30 @@
   </section>
   </div>
 
+  <!-- ABOUT / STORY -->
+  <section id="about" class="about">
+    <div class="about__inner">
+      <div class="about__hang">
+        <div class="about__pin-stack" aria-hidden="true">
+          <span class="about__pin-line"></span>
+          <span class="about__pin-dot"></span>
+        </div>
+        <div class="about__photo" id="about-photo">
+          <img src="photos/idpic.png" alt="אמלמל" loading="lazy" />
+        </div>
+      </div>
+      <div class="about__text">
+        <p class="about__lead">גם אני התחלתי בדיוק מהמקום שלך.</p>
+        <p class="about__p">לא היה לי ציוד יקר, לא ידעתי לערוך, ולא גדלתי עם מצלמה ביד. <strong>אבל הייתה לי תשוקה.</strong></p>
+        <p class="about__p">כילדה שעלתה לארץ, למדתי מהר מאוד להתבייש במי שאני, ובמשך שנים השתקתי את הקול שלי. דרך התוכן, העריכה והסטוריטלינג, מצאתי דרך לחזור לעצמי, וליצור תוכן שתופס את העין, מספר סיפור, ואי אפשר להתעלם ממנו.</p>
+        <p class="about__p">לפני פחות משנה התפטרתי מול כל האינטרנט, ונתתי לעצמי 30 ימים להרוויח את הכסף הראשון שלי מאינסטגרם.</p>
+        <p class="about__p"><strong>מה שקרה מאז:</strong><br />✦ בניתי עסק של <mark>6 ספרות</mark> מתוכן בלבד<br />✦ שיתפתי פעולה עם <mark>Google</mark><br />✦ יצרתי קהילה של מעל <mark>10,000 יוצרות</mark> ובעלות עסקים<br />והכל קרה תוך פחות משנה.</p>
+        <p class="about__p">השיטה הזאת לקחה אותי לשם. היום אני מלמדת אותה בצורה ברורה, פשוטה, וכזאת שאפשר באמת ליישם.</p>
+        <p class="about__p">בניתי את CUT IT כדי שלא תחכי. לא לזמן הנכון. לא לציוד המושלם. <strong>רק תתחילי.</strong></p>
+      </div>
+    </div>
+  </section>
+
   <!-- DIARY — את מכירה את זה -->
   <section class="diary">
     <div class="diary__inner">
@@ -171,7 +188,7 @@
           <path id="snake-track" d="M 12,20 L 76,20 Q 88,20 88,32 L 88,40 Q 88,52 76,52 L 24,52 Q 12,52 12,64 L 12,70 Q 12,82 24,82 L 88,82"
                 fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           <path id="snake-progress" d="M 12,20 L 76,20 Q 88,20 88,32 L 88,40 Q 88,52 76,52 L 24,52 Q 12,52 12,64 L 12,70 Q 12,82 24,82 L 88,82"
-                fill="none" stroke="#B7321F" stroke-width="1.8"
+                fill="none" stroke="#F03228" stroke-width="1.8"
                 stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
 
@@ -193,7 +210,7 @@
           <span class="path__node-label path__node-label--out-right">פרונטלי · AI + יצירה</span>
         </div>
 
-        <img class="path__marker" id="path-marker" src="movingface2.png" alt="" />
+        <img class="path__marker" id="path-marker" src="movingface.png" alt="" />
       </div>
     </section>
   </div>
@@ -229,39 +246,13 @@
     </div>
   </section>
 
-  <!-- ABOUT / STORY -->
-  <section id="about" class="about">
-    <div class="about__inner">
-      <div class="about__hang">
-        <div class="about__pin-stack" aria-hidden="true">
-          <span class="about__pin-line"></span>
-          <span class="about__pin-dot"></span>
-        </div>
-        <div class="about__photo" id="about-photo">
-          <img src="photos/idpic.png" alt="אמלמל" loading="lazy" />
-        </div>
-      </div>
-      <div class="about__text">
-        <span class="about__tag"><span data-scramble data-scramble-duration="1500" data-scramble-char-delay="55" data-scramble-tick="58" data-scramble-hover="true">היי, אני</span></span>
-        <h2 class="about__title"><span data-scramble data-scramble-duration="1600" data-scramble-char-delay="95" data-scramble-tick="58" data-scramble-hover="true">אמלמל</span><br /><em data-scramble data-scramble-duration="2400" data-scramble-char-delay="62" data-scramble-tick="58" data-scramble-hover="true">יוצרת תוכן דיגיטלי</em></h2>
-        <p class="about__lead">גם אני התחלתי בדיוק מהמקום שלך.</p>
-        <p class="about__p">לא היה לי ציוד יקר, לא ידעתי לערוך, ולא גדלתי עם מצלמה ביד. <strong>אבל הייתה לי תשוקה.</strong></p>
-        <p class="about__p">כילדה שעלתה לארץ, למדתי מהר מאוד להתבייש במי שאני, ובמשך שנים השתקתי את הקול שלי. דרך התוכן, העריכה והסטוריטלינג — מצאתי דרך לחזור לעצמי, וליצור תוכן שתופס את העין, מספר סיפור, ואי אפשר להתעלם ממנו.</p>
-        <p class="about__p">לפני פחות משנה התפטרתי מול כל האינטרנט, ונתתי לעצמי 30 ימים להרוויח את הכסף הראשון שלי מאינסטגרם.</p>
-        <p class="about__p"><strong>מה שקרה מאז:</strong><br />✦ בניתי עסק של <mark>6 ספרות</mark> — מתוכן בלבד<br />✦ שיתפתי פעולה עם <mark>Google</mark><br />✦ יצרתי קהילה של מעל <mark>10,000 יוצרות</mark> ובעלות עסקים<br />והכל קרה תוך פחות משנה.</p>
-        <p class="about__p">השיטה הזאת לקחה אותי לשם. היום אני מלמדת אותה — בצורה ברורה, פשוטה, וכזאת שאפשר באמת ליישם.</p>
-        <p class="about__p">בניתי את CUT IT כדי שלא תחכי. לא לזמן הנכון. לא לציוד המושלם. <strong>רק תתחילי.</strong></p>
-      </div>
-    </div>
-  </section>
-
   <!-- URGENCY — האלגוריתם לא עוצר -->
   <section class="urgency">
     <div class="urgency__inner">
       <h2 class="urgency__title">כי עולם התוכן לא מחכה.<br /><em>האלגוריתם לא עוצר.</em></h2>
       <p class="urgency__p">היכולת ליצור סרטונים בולטים — היא כבר לא בונוס. היא חלק הכרחי מהנוכחות שלך ברשת.</p>
       <p class="urgency__p">כל שבוע שאת לא יוצרת — מישהי אחרת תופסת את המקום שהיה יכול להיות שלך בפיד. <strong>לא כי היא טובה יותר ממך. כי היא למדה קודם.</strong></p>
-      <p class="urgency__p urgency__p--strong">המחזור הקרוב נפתח ב-<span class="urgency__date js-cycle-date">[תאריך]</span>.</p>
+      <p class="urgency__p urgency__p--strong">המחזור הקרוב נפתח ב-<span class="urgency__date" data-cycle-date>[תאריך]</span>.</p>
       <a class="urgency__cta" href="#contact">תפסי את המקום שלך עכשיו ←</a>
     </div>
   </section>
@@ -299,7 +290,7 @@
     <div class="contact__box">
       <div class="contact__logo-dot"></div>
       <h2 class="contact__title">מוכנה <em>להתחיל?</em></h2>
-      <p class="contact__sub">המחזור הקרוב נפתח ב-<strong class="js-cycle-date">[תאריך]</strong>. נותרו <strong class="js-cycle-spots">—</strong> מקומות בלבד.</p>
+      <p class="contact__sub">המחזור הקרוב נפתח ב-<strong data-cycle-date>[תאריך]</strong>. נותרו <strong data-cycle-spots>[X]</strong> מקומות בלבד.</p>
       <form class="leadf" id="lead-form" action="https://formspree.io/f/xjgjwynp" method="POST" novalidate>
         <label class="leadf__row"><span>שם מלא</span><input type="text" name="name" required autocomplete="name" placeholder="השם שלך" /></label>
         <label class="leadf__row"><span>טלפון</span><input type="tel" name="phone" required autocomplete="tel" placeholder="05X-XXXXXXX" /></label>
@@ -404,7 +395,7 @@
     };
     window.dispatchEvent(new CustomEvent('cutit-fb-ready'));
   </script>
-  <script src="script.js?v=37"></script>
+  <script src="script.js?v=39"></script>
 </body>
 
 </html>

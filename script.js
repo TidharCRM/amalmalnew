@@ -2,13 +2,12 @@
   'use strict';
 
   // Hero — frame scrubber
-  var FRAME_COUNT  = 81;
-  var INTRO_END    = 0.45; // first sentence fully gone by here
-  var LOGO_START   = 0.55; // second sentence starts fading in here
+  var FRAME_COUNT    = 81;
+  var ANIM_END       = 0.7;  // animation completes at this scroll fraction
+  var FINAL_TRIGGER  = 0.72; // tiny linger before swapping lead → final content
 
   var heroPin     = document.getElementById('hero-pin');
   var canvas      = document.getElementById('hero-canvas');
-  var heroIntro   = document.getElementById('hero-intro');
   var logoOverlay = document.getElementById('hero-logo-overlay');
   var heroHint    = document.getElementById('hero-hint');
 
@@ -57,28 +56,21 @@
       if (maxScroll <= 0) return;
       var p = Math.max(0, Math.min(1, window.scrollY / maxScroll));
 
-      var idx = Math.min(Math.round(p * (FRAME_COUNT - 1)), FRAME_COUNT - 1);
+      // Animation completes by ANIM_END so the final state can hold for the rest of the scroll.
+      var animP = Math.min(1, p / ANIM_END);
+      var idx = Math.min(Math.round(animP * (FRAME_COUNT - 1)), FRAME_COUNT - 1);
       drawFrame(idx);
 
-      // First sentence: fully visible at scroll start, fades out by INTRO_END
-      if (heroIntro) {
-        var introP = Math.max(0, Math.min(1, 1 - p / INTRO_END));
-        heroIntro.style.opacity = introP.toFixed(3);
-        heroIntro.style.transform = 'translateY(' + (p * -32).toFixed(1) + 'px)';
-      }
-
-      // Second sentence + tagline + CTA: fades in from LOGO_START to end
-      var logoP = Math.max(0, (p - LOGO_START) / (1 - LOGO_START));
-      logoOverlay.style.opacity = logoP.toFixed(3);
+      // Lead headline shows from the start; rest reveals only after the animation completes.
+      logoOverlay.classList.toggle('is-final', p >= FINAL_TRIGGER);
 
       // Hint fades out quickly
       heroHint.style.opacity = Math.max(0, 1 - p * 7).toFixed(2);
 
-      // Nav logo: hide only while the hero's big logo is on screen
+      // Nav logo: hide while the hero pin still dominates the viewport
       if (navLogo) {
         var pinBottom = heroPin.getBoundingClientRect().bottom;
-        var heroLogoShowing = logoP > 0.15 && pinBottom > 0;
-        navLogo.classList.toggle('nav__logo--hidden', heroLogoShowing);
+        navLogo.classList.toggle('nav__logo--hidden', pinBottom > window.innerHeight * 0.5);
       }
     }
 
@@ -214,22 +206,23 @@
   function formatHebrewDate(ts){
     var d = new Date(ts);
     if (isNaN(d.getTime())) return '';
-    return d.getDate() + ' ב' + HEB_MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    return d.getDate() + ' ב' + HEB_MONTHS[d.getMonth()];
   }
 
   function updateSpotsDisplay(){
-    var text = (spotsLeft === null || spotsLeft === undefined) ? '—' : String(spotsLeft);
     var bc = document.getElementById('bc-spots');
-    if (bc) bc.textContent = text;
-    var els = document.querySelectorAll('.js-cycle-spots');
-    for (var i = 0; i < els.length; i++) els[i].textContent = text;
+    var spotsText = (spotsLeft === null || spotsLeft === undefined) ? '—' : String(spotsLeft);
+    if (bc) bc.textContent = spotsText;
+    document.querySelectorAll('[data-cycle-spots]').forEach(function(el){
+      el.textContent = spotsText;
+    });
   }
 
-  function updateDateDisplay(){
-    var formatted = formatHebrewDate(getCycleTarget());
-    if (!formatted) return;
-    var els = document.querySelectorAll('.js-cycle-date');
-    for (var i = 0; i < els.length; i++) els[i].textContent = formatted;
+  function updateCycleDateDisplay(){
+    var dateText = formatHebrewDate(cycleTarget);
+    document.querySelectorAll('[data-cycle-date]').forEach(function(el){
+      el.textContent = dateText;
+    });
   }
 
   function subscribeFirebase(){
@@ -241,8 +234,8 @@
         var d = new Date(data);
         if (!isNaN(d.getTime())) {
           cycleTarget = d.getTime();
+          updateCycleDateDisplay();
           if (window.__cutitTickCountdown) window.__cutitTickCountdown();
-          updateDateDisplay();
         }
       }
     });
@@ -257,10 +250,8 @@
       }
     });
   }
-  // Render defaults so [תאריך]/[X] never appear before Firebase responds
-  updateDateDisplay();
+  updateCycleDateDisplay();
   updateSpotsDisplay();
-
   if (window.__cutitFb) subscribeFirebase();
   else window.addEventListener('cutit-fb-ready', subscribeFirebase);
 
@@ -397,7 +388,7 @@
         spotsLeft = spotsVal;
         if (window.__cutitTickCountdown) window.__cutitTickCountdown();
         updateSpotsDisplay();
-        updateDateDisplay();
+        updateCycleDateDisplay();
         saveStatus.textContent = 'נשמר בהצלחה';
         setTimeout(closeModal, 900);
       }).catch(function(err){
@@ -603,7 +594,7 @@
     function setupProgressStroke() {
       if (!progressPath || typeof progressPath.getTotalLength !== 'function') return;
       progressLen = progressPath.getTotalLength();
-      progressPath.style.stroke = '#B7321F';
+      progressPath.style.stroke = '#F03228';
       progressPath.style.strokeDasharray = progressLen;
       progressPath.style.strokeDashoffset = progressLen;
       progressPath.style.transition = 'stroke-dashoffset .12s linear';
