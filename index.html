@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cut It by Amalmal</title>
   <meta name="description" content="קורס עריכה ויצירת תוכן שמלמד אותך לערוך, ליצור ולהביא את הקול שלך החוצה. מהטלפון. עם AI. בלי ציוד יקר." />
-  <link rel="stylesheet" href="style.css?v=81" />
+  <link rel="stylesheet" href="style.css?v=83" />
 </head>
 
 <body>
@@ -292,10 +292,23 @@
       <div class="contact__logo-dot"></div>
       <h2 class="contact__title">מוכנה <em>להתחיל?</em></h2>
       <p class="contact__sub">2 מחזורים במאי: <strong>בוקר 13.5</strong> · 10:00–13:00 או <strong>ערב 17.5</strong> · 17:00–20:00. נותרו <strong data-cycle-spots>[X]</strong> מקומות בלבד.</p>
-      <form class="leadf" id="lead-form" action="https://formspree.io/f/xjgjwynp" method="POST" novalidate>
+
+      <div class="buynow">
+        <p class="buynow__title">תפסי את המקום שלך <em>עכשיו</em></p>
+        <p class="buynow__sub">תשלום מאובטח · הרשמה מיידית למחזור הקרוב</p>
+        <a class="buynow__btn" href="https://pay.grow.link/b30895a4c54697473eb0855f393b50e1-MzM2MDIyNw" target="_blank" rel="noopener">
+          להרשמה ולתשלום ←
+        </a>
+        <p class="buynow__assure">מקום נשמר רק אחרי תשלום.</p>
+      </div>
+
+      <div class="contact__divider" aria-hidden="true"><span>רוצה לדבר קודם?</span></div>
+
+      <p class="contact__altsub">השאירי פרטים ואמלמל תחזור אליך לשיחת התאמה קצרה.</p>
+      <form class="leadf leadf--alt" id="lead-form" action="https://formspree.io/f/xjgjwynp" method="POST" novalidate>
         <label class="leadf__row"><span>שם מלא</span><input type="text" name="name" required autocomplete="name" placeholder="השם שלך" /></label>
         <label class="leadf__row"><span>טלפון</span><input type="tel" name="phone" required autocomplete="tel" placeholder="05X-XXXXXXX" /></label>
-        <button class="leadf__btn" type="submit" id="lead-submit">אמלמל, שמרי לי מקום ←</button>
+        <button class="leadf__btn leadf__btn--alt" type="submit" id="lead-submit">שמרי לי שיחה ←</button>
       </form>
       <div class="leadf__ok" id="lead-success" hidden>✓ שלחתי! אמלמל תחזור אליך תוך שעות. בינתיים — בואי נתחבר: <a href="https://instagram.com/amalmal50" target="_blank" rel="noopener">@amalmal50 באינסטגרם ←</a></div>
     </div>

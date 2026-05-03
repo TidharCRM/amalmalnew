@@ -1176,6 +1176,89 @@ h1 em, h2 em, h3 em, h4 em { font-family: var(--serif); font-style: italic; }
   margin-top: 18px; color: #0b8a3e; font-weight: 700; font-size: 15px;
 }
 
+/* PRIMARY: Direct purchase block — the loud CTA */
+.buynow { text-align: center; }
+.buynow__title {
+  font-family: var(--headline);
+  font-size: clamp(20px, 2.8vw, 26px);
+  font-weight: 700;
+  color: var(--black);
+  margin: 0 0 6px;
+  line-height: 1.2;
+}
+.buynow__title em { font-style: italic; color: var(--red); }
+.buynow__sub {
+  margin: 0 0 18px;
+  color: rgba(17,17,17,.6);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.buynow__btn {
+  display: block; width: 100%;
+  padding: 20px 28px;
+  background: var(--red); color: var(--white);
+  border: none;
+  border-radius: 10px;
+  font-family: var(--headline);
+  font-size: 17px; font-weight: 700;
+  letter-spacing: .04em;
+  text-decoration: none;
+  box-shadow: 0 12px 28px rgba(183,50,31,.4);
+  transition: transform .15s, box-shadow .15s, background .15s;
+}
+.buynow__btn:hover {
+  background: var(--red-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(183,50,31,.5);
+}
+.buynow__assure {
+  margin: 12px 0 0;
+  color: rgba(17,17,17,.5);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: .04em;
+}
+
+/* Divider that introduces the secondary "talk first" path */
+.contact__divider {
+  display: flex; align-items: center;
+  margin: 36px 0 18px;
+  color: rgba(17,17,17,.5);
+  font-family: var(--headline);
+  font-size: 12px; font-weight: 700; letter-spacing: .08em;
+}
+.contact__divider::before,
+.contact__divider::after {
+  content: ""; flex: 1; height: 1px;
+  background: rgba(17,17,17,.15);
+}
+.contact__divider span { padding: 0 12px; }
+
+/* SECONDARY: lead form, quieter than the purchase block */
+.contact__altsub {
+  margin: 0 0 16px;
+  color: rgba(17,17,17,.55);
+  font-size: 13px; line-height: 1.5;
+  text-align: center;
+}
+.leadf--alt .leadf__row input {
+  background: transparent;
+  border-color: rgba(17,17,17,.18);
+  font-size: 15px;
+  padding: 10px 12px;
+}
+.leadf__btn--alt {
+  background: transparent; color: var(--black);
+  border: 1.5px solid var(--black);
+  box-shadow: none;
+  padding: 13px 28px;
+  font-size: 14px; font-weight: 600;
+  margin-top: 18px;
+}
+.leadf__btn--alt:hover {
+  background: var(--black); color: var(--white);
+  box-shadow: 0 8px 18px rgba(17,17,17,.25);
+}
+
 /* ─── FOOTER ──────────────────────────────────────────────── */
 .foot {
   background: var(--black);
